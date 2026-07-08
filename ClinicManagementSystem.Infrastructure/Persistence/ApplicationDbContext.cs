@@ -35,8 +35,9 @@ namespace ClinicManagementSystem.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
-            // هنا هنضيف الـ Fluent API Configurations في الجلسة الجاية
+
         }
     }
 }
