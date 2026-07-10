@@ -12,9 +12,20 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="Features\" />
+    <Folder Include="DTOs\Visits\" />
+    <Folder Include="DTOs\Doctors\" />
+    <Folder Include="Features\Doctors\Queries\" />
+    <Folder Include="Features\Doctors\Commands\" />
+    <Folder Include="Features\Patients\Queries\" />
+    <Folder Include="Features\Patients\Commands\" />
+    <Folder Include="Features\Visits\Queries\" />
+    <Folder Include="Features\Visits\Commands\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="DTOs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="MediatR" Version="14.2.0" />
   </ItemGroup>
 
 </Project>
