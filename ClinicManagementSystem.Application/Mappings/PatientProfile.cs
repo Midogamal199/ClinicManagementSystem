@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using ClinicManagementSystem.Application.DTOs.Patients;
+using ClinicManagementSystem.Application.Features.Patients.Commands.CreatePatient;
 using ClinicManagementSystem.Domain.Entities;
 
 namespace ClinicManagementSystem.Application.Mappings
@@ -14,6 +15,7 @@ namespace ClinicManagementSystem.Application.Mappings
         public PatientProfile()
         {
             CreateMap<Patient, PatientDto>();
+            CreateMap<CreatePatientCommand, Patient>();
         }
     }
 }

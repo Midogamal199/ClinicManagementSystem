@@ -11,13 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Common\" />
     <Folder Include="DTOs\Visits\" />
     <Folder Include="DTOs\Doctors\" />
     <Folder Include="Features\Doctors\Queries\" />
     <Folder Include="Features\Doctors\Commands\" />
     <Folder Include="Features\Patients\Queries\" />
-    <Folder Include="Features\Patients\Commands\" />
     <Folder Include="Features\Visits\Queries\" />
     <Folder Include="Features\Visits\Commands\" />
     <Folder Include="Interfaces\" />
@@ -25,6 +23,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.2.0" />
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="MediatR" Version="14.2.0" />
   </ItemGroup>
 

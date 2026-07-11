@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using System.Reflection;
+using ClinicManagementSystem.Application.Common.Behaviors;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace ClinicManagementSystem.Application.Extensions
 {
@@ -15,6 +17,9 @@ namespace ClinicManagementSystem.Application.Extensions
 
            
             services.AddAutoMapper(cfg => { }, assembly);
+            services.AddValidatorsFromAssembly(assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 
 
             return services;
