@@ -47,6 +47,21 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
             return await _dbSet.FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
 
+        public async Task<(IEnumerable<T> items, int Totalcount)> GetPagedAsync(int pageNumber, int pageSize, Expression<Func<T, bool>>? filter = null)
+        {
+            IQueryable<T> query = _dbSet;
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
+            var totalCount = await query.CountAsync();
+
+            var items = await query.Skip((pageNumber - 1) * pageSize)
+                                   .Take(pageSize)
+                                   .ToListAsync();
+            return (items, totalCount);
+        }
+
         public void Update(T entity)
         {
            entity.UpdatedAt = DateTime.UtcNow;

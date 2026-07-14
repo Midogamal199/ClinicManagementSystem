@@ -17,6 +17,10 @@ namespace ClinicManagementSystem.Domain.Interfaces
         Task AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
+        Task<(IEnumerable<T> items,int Totalcount)> GetPagedAsync(int pageNumber,
+            int pageSize,    Expression<Func<T, bool>>? filter = null);
+
+        
 
 
     }
