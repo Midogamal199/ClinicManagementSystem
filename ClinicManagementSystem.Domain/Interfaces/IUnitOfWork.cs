@@ -10,6 +10,8 @@ namespace ClinicManagementSystem.Domain.Interfaces
     public interface IUnitOfWork:IDisposable
     {
         IGenericRepository<T> Repository<T>() where T : BaseEntity;
+        IDoctorRepository DoctorRepository { get; }
         Task<int> SaveChangesAsync();
+
     }
 }

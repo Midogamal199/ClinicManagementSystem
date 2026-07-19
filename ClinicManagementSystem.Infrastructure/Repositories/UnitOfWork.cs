@@ -13,10 +13,14 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly Dictionary<Type, object> _repositories = new();
+        private IDoctorRepository? _doctorRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        public IDoctorRepository DoctorRepository => _doctorRepository ??= new DoctorRepository(_context);
+
         public void Dispose()
         {
           _context.Dispose(); 

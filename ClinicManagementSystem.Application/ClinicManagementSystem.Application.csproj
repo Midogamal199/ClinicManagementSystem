@@ -12,9 +12,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Visits\" />
-    <Folder Include="DTOs\Doctors\" />
     <Folder Include="Features\Doctors\Queries\" />
-    <Folder Include="Features\Doctors\Commands\" />
     <Folder Include="Features\Visits\Queries\" />
     <Folder Include="Features\Visits\Commands\" />
     <Folder Include="Interfaces\" />
