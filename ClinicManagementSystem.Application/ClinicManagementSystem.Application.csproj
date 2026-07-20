@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Visits\" />
-    <Folder Include="Features\Doctors\Queries\" />
     <Folder Include="Features\Visits\Queries\" />
     <Folder Include="Features\Visits\Commands\" />
     <Folder Include="Interfaces\" />
