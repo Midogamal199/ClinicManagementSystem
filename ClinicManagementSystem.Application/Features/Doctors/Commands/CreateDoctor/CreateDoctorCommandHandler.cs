@@ -20,7 +20,7 @@ namespace ClinicManagementSystem.Application.Features.Doctors.Commands.CreateDoc
 
         public async Task<Guid> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
         {
-            var employee =_unitOfWork.Repository<Employee>().GetByIdAsync(request.EmployeeId);
+            var employee =await _unitOfWork.Repository<Employee>().GetByIdAsync(request.EmployeeId);
             if (employee is null)
             {
                 throw new KeyNotFoundException($"Employee with Id '{request.EmployeeId}' was not found.");

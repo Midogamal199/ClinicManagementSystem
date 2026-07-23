@@ -11,6 +11,7 @@ namespace ClinicManagementSystem.Domain.Interfaces
     {
         IGenericRepository<T> Repository<T>() where T : BaseEntity;
         IDoctorRepository DoctorRepository { get; }
+        IVisitRepository VisitRepository { get; }
         Task<int> SaveChangesAsync();
 
     }

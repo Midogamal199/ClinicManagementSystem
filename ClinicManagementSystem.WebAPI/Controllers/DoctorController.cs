@@ -1,4 +1,5 @@
 ﻿using ClinicManagementSystem.Application.Features.Doctors.Commands.CreateDoctor;
+using ClinicManagementSystem.Application.Features.Doctors.Commands.DeleteDoctor;
 using ClinicManagementSystem.Application.Features.Doctors.Commands.UpdateDoctor;
 using ClinicManagementSystem.Application.Features.Doctors.Queries.GetAllDoctors;
 using ClinicManagementSystem.Application.Features.Doctors.Queries.GetDoctorById;
@@ -37,7 +38,7 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var doctor = await _mediator.Send(new GetDoctorByIdQuery(id));
+            var doctor = await _mediator.Send(new DeleteDoctorCommand { Id = id });
             return NoContent();
 
         }
