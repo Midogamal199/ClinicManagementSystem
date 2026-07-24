@@ -15,6 +15,7 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         private readonly Dictionary<Type, object> _repositories = new();
         private IDoctorRepository? _doctorRepository;
         private IVisitRepository? _visitRepository;
+        private IAppointmentRepository? _appointmentRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -23,6 +24,8 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         public IDoctorRepository DoctorRepository => _doctorRepository ??= new DoctorRepository(_context);
 
         public IVisitRepository VisitRepository => _visitRepository ??= new VisitRepository(_context);
+        public IAppointmentRepository AppointmentRepository =>
+    _appointmentRepository ??= new AppointmentRepository(_context);
 
         public void Dispose()
         {
