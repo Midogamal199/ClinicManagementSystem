@@ -16,6 +16,7 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         private IDoctorRepository? _doctorRepository;
         private IVisitRepository? _visitRepository;
         private IAppointmentRepository? _appointmentRepository;
+        private IEmployeeRepository? _employeeRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -26,6 +27,8 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         public IVisitRepository VisitRepository => _visitRepository ??= new VisitRepository(_context);
         public IAppointmentRepository AppointmentRepository =>
     _appointmentRepository ??= new AppointmentRepository(_context);
+        public IEmployeeRepository EmployeeRepository =>
+    _employeeRepository ??= new EmployeeRepository(_context);
 
         public void Dispose()
         {
