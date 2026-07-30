@@ -14,4 +14,5 @@ namespace ClinicManagementSystem.Domain.Entities
         public Guid PrescriptionId { get; set; }
         public Prescription Prescription { get; set; }
     }
+
 }
