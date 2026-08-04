@@ -19,6 +19,9 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         private IEmployeeRepository? _employeeRepository;
         private IDiagnosisRepository? _diagnosisRepository;
         private IPrescriptionRepository? _prescriptionRepository;
+        private IAttendanceRepository? _attendanceRepository;
+        private ILeaveRequestRepository? _leaveRequestRepository;
+        private IDepartmentRepository? _departmentRepository;
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
@@ -36,6 +39,12 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
 
         public IPrescriptionRepository PrescriptionRepository =>
             _prescriptionRepository ??= new PrescriptionRepository(_context);
+        public IAttendanceRepository AttendanceRepository =>
+    _attendanceRepository ??= new AttendanceRepository(_context);
+        public ILeaveRequestRepository LeaveRequestRepository =>
+    _leaveRequestRepository ??= new LeaveRequestRepository(_context);
+        public IDepartmentRepository DepartmentRepository =>
+    _departmentRepository ??= new DepartmentRepository(_context);
 
         public void Dispose()
         {
