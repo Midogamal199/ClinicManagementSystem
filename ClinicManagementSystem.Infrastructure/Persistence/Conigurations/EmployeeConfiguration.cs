@@ -24,6 +24,12 @@ namespace ClinicManagementSystem.Infrastructure.Persistence.Conigurations
             builder.Property(e => e.Salary)
                 .HasColumnType("decimal(10,2)")
                 .IsRequired();
+            builder.Property(e => e.Position)
+            .IsRequired()
+            .HasMaxLength(100);
+            builder.Property(e => e.AnnualLeaveBalance)
+            .IsRequired()
+            .HasDefaultValue(21);
             builder.HasMany(e=>e.Attendances)
                 .WithOne(a=>a.Employee)
                 .HasForeignKey(a=>a.EmployeeId)

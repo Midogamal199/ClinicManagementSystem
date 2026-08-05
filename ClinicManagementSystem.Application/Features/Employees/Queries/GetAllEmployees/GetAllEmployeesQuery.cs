@@ -15,5 +15,6 @@ namespace ClinicManagementSystem.Application.Features.Employees.Queries.GetAllEm
         public int PageSize { get; set; } = 10;
         public string? SearchTerm { get; set; }
         public Guid? DepartmentId { get; set; }
+        public string? Position { get; set; }
     }
 }

@@ -35,6 +35,7 @@ namespace ClinicManagementSystem.Application.Features.Employees.Commands.UpdateE
             }
             employee.FullName = request.FullName;
             employee.PhoneNumber = request.PhoneNumber;
+            employee.Position = request.Position;
             employee.Salary = request.Salary;
             employee.DepartmentId = request.DepartmentId;
 

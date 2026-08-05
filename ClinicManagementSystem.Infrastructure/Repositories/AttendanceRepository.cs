@@ -51,5 +51,6 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
 
             return (items, totalCount);
         }
+
     }
 }

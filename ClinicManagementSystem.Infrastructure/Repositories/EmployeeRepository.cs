@@ -26,7 +26,7 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
                 .FirstOrDefaultAsync(e=> e.Id == id);
         }
 
-        public async Task<(IEnumerable<Employee> Items, int TotalCount)> GetPagedWithDetailsAsync(int pageNumber, int pageSize, string? searchTerm, Guid? departmentId)
+        public async Task<(IEnumerable<Employee> Items, int TotalCount)> GetPagedWithDetailsAsync(int pageNumber, int pageSize, string? searchTerm, Guid? departmentId, string? position)
         {
             IQueryable<Employee> query = _context.Employees.Include(e => e.Department);
             if (!string.IsNullOrEmpty(searchTerm))
@@ -36,6 +36,10 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
             if(departmentId.HasValue)
             {
                 query = query.Where(e => e.DepartmentId == departmentId.Value);
+            }
+            if (!string.IsNullOrWhiteSpace(position))
+            {
+                query = query.Where(e => e.Position.Contains(position));
             }
             var totalCount = await query.CountAsync();
             var items = await query

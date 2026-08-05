@@ -13,5 +13,6 @@ namespace ClinicManagementSystem.Application.DTOs.Attendances
         public DateTime? CheckOut { get; set; }
         public Guid EmployeeId { get; set; }
         public string EmployeeFullName { get; set; }
+        public double? WorkingHours { get; set; }
     }
 }

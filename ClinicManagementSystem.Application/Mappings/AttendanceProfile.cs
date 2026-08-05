@@ -10,7 +10,12 @@ namespace ClinicManagementSystem.Application.Mappings
         {
             CreateMap<Attendance, AttendanceDto>()
                 .ForMember(dest => dest.EmployeeFullName,
-                    opt => opt.MapFrom(src => src.Employee.FullName));
+                    opt => opt.MapFrom(src => src.Employee.FullName))
+                .ForMember(dest => dest.WorkingHours,
+                    opt => opt.MapFrom(src => src.CheckOut.HasValue
+                   ? Math.Round((src.CheckOut.Value - src.CheckIn).TotalHours, 2)
+                    : (double?)null));
+ 
         }
     }
 }

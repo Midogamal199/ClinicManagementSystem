@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClinicManagementSystem.Domain.Entities;
+using ClinicManagementSystem.Domain.Enums;
 using ClinicManagementSystem.Domain.Interfaces;
 using MediatR;
 
@@ -28,6 +29,14 @@ namespace ClinicManagementSystem.Application.Features.Attendances.Commands.Check
             if (openAttendance is not null)
             {
                 throw new InvalidOperationException($"Employee with Id '{request.EmployeeId}' already has an open attendance record.");
+            }
+            var today = DateTime.UtcNow.Date;
+            var onApprovedLeave = await _unitOfWork.Repository<LeaveRequest>().FindAsync(
+                l => l.EmployeeId == request.EmployeeId && l.Status == LeaveStatus.Approved && l.StartDate <= today && l.EndDate >= today );
+            if (onApprovedLeave.Any())
+            {
+                throw new InvalidOperationException(
+                    "This employee is on approved leave today and cannot check in.");
             }
             var attendance = new Attendance
             {

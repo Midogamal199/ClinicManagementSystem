@@ -2,6 +2,7 @@
 using ClinicManagementSystem.Application.Features.Attendances.Commands.CheckOut;
 using ClinicManagementSystem.Application.Features.Attendances.Queries.GetAllAttendances;
 using ClinicManagementSystem.Application.Features.Attendances.Queries.GetAttendanceById;
+using ClinicManagementSystem.Application.Features.Attendances.Queries.GetWorkingHours;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,6 +41,12 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         {
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+        [HttpGet("{id}/working-hours")]
+        public async Task<IActionResult> GetWorkingHours(Guid id)
+        {
+            var hours = await _mediator.Send(new GetWorkingHoursQuery(id));
+            return Ok(new { workingHours = hours });
         }
 
 

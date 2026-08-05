@@ -21,6 +21,9 @@ namespace ClinicManagementSystem.Application.Features.Employees.Commands.UpdateE
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty().WithMessage("Phone number is required.")
                 .MaximumLength(20).WithMessage("Phone number cannot exceed 20 characters.");
+            RuleFor(x => x.Position)
+            .NotEmpty().WithMessage("Position is required.")
+            .MaximumLength(100).WithMessage("Position cannot exceed 100 characters.");
 
             RuleFor(x => x.Salary)
                 .GreaterThan(0).WithMessage("Salary must be greater than 0.");

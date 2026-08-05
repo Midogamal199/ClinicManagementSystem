@@ -3,6 +3,7 @@ using ClinicManagementSystem.Application.Features.Employees.Commands.DeleteEmplo
 using ClinicManagementSystem.Application.Features.Employees.Commands.UpdateEmployeeCommand.cs;
 using ClinicManagementSystem.Application.Features.Employees.Queries.GetAllEmployees;
 using ClinicManagementSystem.Application.Features.Employees.Queries.GetEmployeeById;
+using ClinicManagementSystem.Application.Features.Employees.Queries.GetRemainingLeaveDays;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,6 +54,12 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         {
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+        [HttpGet("{id}/remaining-leave-days")]
+        public async Task<IActionResult> GetRemainingLeaveDays(Guid id)
+        {
+            var remainingDays = await _mediator.Send(new GetRemainingLeaveDaysQuery(id));
+            return Ok(new { remainingLeaveDays = remainingDays });
         }
 
     }

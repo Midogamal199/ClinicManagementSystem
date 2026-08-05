@@ -28,7 +28,8 @@ namespace ClinicManagementSystem.Application.Features.Employees.Queries.GetAllEm
                request.PageNumber,
                request.PageSize,
                request.SearchTerm,
-               request.DepartmentId);
+               request.DepartmentId,
+               request.Position);
             var dtos = _mapper.Map<List<EmployeeDto>>(employees);
             return new PaginatedResult<EmployeeDto>
             {

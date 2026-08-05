@@ -30,6 +30,7 @@ namespace ClinicManagementSystem.Application.Features.Employees.Commands.CreateE
             {
                 FullName = request.FullName,
                 PhoneNumber = request.PhoneNumber,
+                Position = request.Position,
                 Salary = request.Salary,
                 DepartmentId = request.DepartmentId
             };

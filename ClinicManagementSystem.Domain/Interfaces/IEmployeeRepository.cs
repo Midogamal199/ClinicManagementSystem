@@ -14,7 +14,8 @@ namespace ClinicManagementSystem.Domain.Interfaces
           int pageNumber,
           int pageSize,
           string? searchTerm,
-          Guid? departmentId);
+          Guid? departmentId,
+             string? position);
         Task<bool> HasLinkedDoctorAsync(Guid employeeId);
     }
 }
