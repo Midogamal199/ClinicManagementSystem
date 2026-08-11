@@ -18,7 +18,8 @@ namespace ClinicManagementSystem.Domain.Interfaces
         IPrescriptionRepository PrescriptionRepository { get; }
         IAttendanceRepository AttendanceRepository { get; }
         ILeaveRequestRepository LeaveRequestRepository { get; }
-       
+        
+        IInvoiceRepository InvoiceRepository { get; }
         IDepartmentRepository DepartmentRepository { get; }
         Task<int> SaveChangesAsync();
 

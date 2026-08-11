@@ -22,6 +22,9 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         private IAttendanceRepository? _attendanceRepository;
         private ILeaveRequestRepository? _leaveRequestRepository;
         private IDepartmentRepository? _departmentRepository;
+        private IInvoiceRepository? _invoiceRepository;
+        public IInvoiceRepository InvoiceRepository =>
+    _invoiceRepository ??= new InvoiceRepository(_context);
         public UnitOfWork(ApplicationDbContext context)
         {
             _context = context;
