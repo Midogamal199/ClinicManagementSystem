@@ -16,5 +16,6 @@ namespace ClinicManagementSystem.Domain.Entities
         public Patient Patient { get; set; }
 
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public ICollection<PaymentTransaction> PaymentTransactions { get; set; } = new List<PaymentTransaction>();
     }
 }

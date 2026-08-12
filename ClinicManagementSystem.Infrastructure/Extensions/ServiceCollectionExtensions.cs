@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Domain.Interfaces;
+using ClinicManagementSystem.Infrastructure.ExternalServices;
 using ClinicManagementSystem.Infrastructure.Persistence;
 using ClinicManagementSystem.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +24,7 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPaymentGatewayService, FakePaymentGatewayService>();
 
 
             return services;

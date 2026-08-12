@@ -1,4 +1,5 @@
 ﻿using ClinicManagementSystem.Application.Features.Payments.Commands.CreatePayment;
+using ClinicManagementSystem.Application.Features.Payments.Commands.InitiateOnlinePayment;
 using ClinicManagementSystem.Application.Features.Payments.Queries.GetPaymentsByInvoice;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,12 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         {
             var payments = await _mediator.Send(new GetPaymentsByInvoiceQuery(invoiceId));
             return Ok(payments);
+        }
+        [HttpPost("online/initiate")]
+        public async Task<IActionResult> InitiateOnlinePayment([FromBody] InitiateOnlinePaymentCommand command)
+        {
+            var checkoutUrl = await _mediator.Send(command);
+            return Ok(new { checkoutUrl });
         }
     }
 }
