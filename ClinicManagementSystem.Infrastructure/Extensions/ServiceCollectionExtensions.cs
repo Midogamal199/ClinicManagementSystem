@@ -25,6 +25,7 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IPaymentGatewayService, FakePaymentGatewayService>();
+            services.AddScoped<IWebhookSignatureValidator, FakeWebhookSignatureValidator>();
 
 
             return services;
