@@ -1,6 +1,7 @@
 ﻿using ClinicManagementSystem.Application.Features.Payments.Commands.ConfirmOnlinePayment;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
@@ -16,20 +17,20 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> HandlePaymentWebhook()
+        public async Task<IActionResult> HandlePaymentWebhook([FromQuery(Name = "hmac")] string signature)
         {
             using var reader = new StreamReader(Request.Body);
             var rawPayload = await reader.ReadToEndAsync();
 
-            var signature = Request.Headers["X-Webhook-Signature"].ToString();
+            using var document = JsonDocument.Parse(rawPayload);
+            var obj = document.RootElement.GetProperty("obj");
 
-            var payloadData = System.Text.Json.JsonDocument.Parse(rawPayload);
-            var gatewayReference = payloadData.RootElement.GetProperty("reference").GetString();
-            var isSuccessful = payloadData.RootElement.GetProperty("success").GetBoolean();
+            var gatewayReference = obj.GetProperty("order").GetProperty("id").GetRawText();
+            var isSuccessful = obj.GetProperty("success").GetBoolean();
 
             var command = new ConfirmOnlinePaymentCommand
             {
-                GatewayReference = gatewayReference!,
+                GatewayReference = gatewayReference,
                 IsSuccessful = isSuccessful,
                 RawPayload = rawPayload,
                 Signature = signature

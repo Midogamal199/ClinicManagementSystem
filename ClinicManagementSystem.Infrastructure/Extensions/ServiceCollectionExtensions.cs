@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace ClinicManagementSystem.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
@@ -24,8 +25,11 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IPaymentGatewayService, FakePaymentGatewayService>();
-            services.AddScoped<IWebhookSignatureValidator, FakeWebhookSignatureValidator>();
+            services.Configure<PaymobOptions>(configuration.GetSection("Paymob"));
+
+            services.AddHttpClient<IPaymentGatewayService, PaymobPaymentGatewayService>();
+
+            services.AddScoped<IWebhookSignatureValidator, PaymobWebhookSignatureValidator>();
 
 
             return services;
