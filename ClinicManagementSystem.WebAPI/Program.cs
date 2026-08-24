@@ -1,7 +1,7 @@
 using ClinicManagementSystem.Application.Extensions;
 using ClinicManagementSystem.Infrastructure.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);       
 
 
 builder.Services.AddControllers();

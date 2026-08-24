@@ -30,7 +30,7 @@ namespace ClinicManagementSystem.Infrastructure.ExternalServices
                 var orderId = await RegisterOrderAsync(authToken, amountInCents, transactionReference);
                 var paymentKey = await GetPaymentKeyAsync(authToken, orderId, amountInCents);
                 var checkoutUrl =
-                   $"{_options.BaseUrl}/acceptance/iframes/{_options.IntegrationId}?payment_token={paymentKey}";
+                   $"{_options.BaseUrl}/acceptance/iframes/{_options.IframeId}?payment_token={paymentKey}";
                 return new PaymentGatewayResult
                 {
                     Success = true,
@@ -50,11 +50,16 @@ namespace ClinicManagementSystem.Infrastructure.ExternalServices
         }
         private async Task<string> GetAuthTokenAsync()
         {
-            var response =await _httpClient.PostAsJsonAsync($"{_options.BaseUrl}/auth/tokens", new
+            var response = await _httpClient.PostAsJsonAsync($"{_options.BaseUrl}/auth/tokens", new
             {
                 api_key = _options.ApiKey
             });
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(
+                    $"Paymob auth failed ({(int)response.StatusCode}): {errorBody}");
+            }
             var result = await response.Content.ReadFromJsonAsync<PaymobAuthResponse>();
             return result!.Token;
         }
@@ -71,7 +76,12 @@ namespace ClinicManagementSystem.Infrastructure.ExternalServices
                 merchant_order_id = transactionReference.ToString()
             });
             var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(
+                    $"Paymob order registration failed ({(int)response.StatusCode}): {errorBody}");
+            }
             var result = await response.Content.ReadFromJsonAsync<PaymobOrderResponse>();
             return result!.Id;
 
@@ -103,7 +113,12 @@ namespace ClinicManagementSystem.Infrastructure.ExternalServices
                     state = "NA"
                 }
             });
-            response.EnsureSuccessStatusCode();
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                throw new HttpRequestException(
+                    $"Paymob payment key request failed ({(int)response.StatusCode}): {errorBody}");
+            }
             var result = await response.Content.ReadFromJsonAsync<PaymobPaymentKeyResponse>();
             return result!.Token;
         }

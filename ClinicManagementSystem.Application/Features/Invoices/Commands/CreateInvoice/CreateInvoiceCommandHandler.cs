@@ -20,7 +20,7 @@ namespace ClinicManagementSystem.Application.Features.Invoices.Commands.CreateIn
         }
         public async Task<Guid> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            var patient = _unitOfWork.Repository<Patient>().GetByIdAsync(request.PatientId);
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(request.PatientId);
             if (patient is null)
             {
                 throw new KeyNotFoundException($"Patient with Id '{request.PatientId}' was not found.");

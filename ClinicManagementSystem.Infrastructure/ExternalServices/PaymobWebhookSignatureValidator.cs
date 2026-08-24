@@ -6,12 +6,17 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using ClinicManagementSystem.Application.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace ClinicManagementSystem.Infrastructure.ExternalServices
 {
     public class PaymobWebhookSignatureValidator : IWebhookSignatureValidator
     {
         private readonly PaymobOptions _options;
+        public PaymobWebhookSignatureValidator(IOptions<PaymobOptions> options)
+        {
+            _options = options.Value;
+        }
         private static readonly string[] FieldOrder =
        {
             "amount_cents", "created_at", "currency", "error_occured",
