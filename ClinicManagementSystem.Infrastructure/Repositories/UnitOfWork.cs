@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ClinicManagementSystem.Application.Common;
 using ClinicManagementSystem.Domain.Interfaces;
 using ClinicManagementSystem.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ClinicManagementSystem.Infrastructure.Repositories
 {
@@ -23,6 +24,7 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         private ILeaveRequestRepository? _leaveRequestRepository;
         private IDepartmentRepository? _departmentRepository;
         private IInvoiceRepository? _invoiceRepository;
+        private IDbContextTransaction? _currentTransaction; 
         public IInvoiceRepository InvoiceRepository =>
     _invoiceRepository ??= new InvoiceRepository(_context);
         public UnitOfWork(ApplicationDbContext context)
@@ -69,6 +71,50 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
+        }
+
+        public async Task BeginTransactionAsync()
+        {
+            _currentTransaction = await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            try
+            {
+                await _context.SaveChangesAsync();
+                if (_currentTransaction is not null)
+                {
+                    await _currentTransaction.CommitAsync();
+                }
+            }
+            finally
+            {
+                if (_currentTransaction is not null)
+                {
+                    await _currentTransaction.DisposeAsync();
+                    _currentTransaction = null;
+                }
+            }
+        }
+
+        public async Task RollbackTransactionAsync()
+        {
+            try
+            {
+                if (_currentTransaction is not null)
+                {
+                    await _currentTransaction.RollbackAsync();
+                }
+            }
+            finally
+            {
+                if (_currentTransaction is not null)
+                {
+                    await _currentTransaction.DisposeAsync();
+                    _currentTransaction = null;
+                }
+            }
         }
     }
 }

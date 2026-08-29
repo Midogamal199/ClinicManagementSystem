@@ -22,6 +22,9 @@ namespace ClinicManagementSystem.Domain.Interfaces
         IInvoiceRepository InvoiceRepository { get; }
         IDepartmentRepository DepartmentRepository { get; }
         Task<int> SaveChangesAsync();
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
 
     }
 }
