@@ -43,6 +43,10 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
             services.Configure<PaymobOptions>(configuration.GetSection("Paymob"));
             services.AddHttpClient<IPaymentGatewayService, PaymobPaymentGatewayService>();
             services.AddScoped<IWebhookSignatureValidator, PaymobWebhookSignatureValidator>();
+            services.AddMemoryCache();
+            services.Configure<MailtrapOptions>(configuration.GetSection("Mailtrap"));
+            services.AddScoped<IEmailService, MailtrapEmailService>();
+            services.AddScoped<IOtpService, OtpService>();
             return services;
         }
     }
