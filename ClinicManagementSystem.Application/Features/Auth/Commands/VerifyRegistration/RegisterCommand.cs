@@ -2,11 +2,12 @@
 using ClinicManagementSystem.Domain.Enums;
 using MediatR;
 
-namespace ClinicManagementSystem.Application.Features.Auth.Commands.Register
+namespace ClinicManagementSystem.Application.Features.Auth.Commands.VerifyRegistration
 {
-    public class RegisterCommand : IRequest<string>
+    public class VerifyRegistrationCommand : IRequest<string>
     {
         public string Email { get; set; }
+        public string Otp { get; set; }
         public string Password { get; set; }
         public string FullName { get; set; }
         public DateTime DateOfBirth { get; set; }

@@ -7,7 +7,6 @@ namespace ClinicManagementSystem.Application.Features.Auth.Commands.CreateStaffA
     public class CreateStaffAccountCommand : IRequest<string>
     {
         public string Email { get; set; }
-        public string Password { get; set; }
         public string Role { get; set; }
         public Guid EmployeeId { get; set; }
         public string? LicenseNumber { get; set; }
