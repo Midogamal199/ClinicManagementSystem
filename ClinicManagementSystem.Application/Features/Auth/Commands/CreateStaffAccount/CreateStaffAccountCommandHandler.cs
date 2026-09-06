@@ -33,20 +33,26 @@ namespace ClinicManagementSystem.Application.Features.Auth.Commands.CreateStaffA
             {
                 throw new InvalidOperationException($"A user with email '{request.Email}' already exists.");
             }
+
             var employee = await _unitOfWork.EmployeeRepository.GetByIdWithDetailsAsync(request.EmployeeId);
             if (employee is null)
             {
                 throw new KeyNotFoundException($"Employee with Id '{request.EmployeeId}' was not found.");
             }
+
             var employeeHasAccount = await _identityService.EmployeeHasAccountAsync(request.EmployeeId);
             if (employeeHasAccount)
             {
                 throw new InvalidOperationException("An account already exists for this employee.");
             }
+
+            string userId;
+            string tempPassword;
+
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                if(request.Role == "Doctor")
+                if (request.Role == "Doctor")
                 {
                     var hasLinkedDoctor = await _unitOfWork.EmployeeRepository.HasLinkedDoctorAsync(request.EmployeeId);
                     if (!hasLinkedDoctor)
@@ -59,22 +65,19 @@ namespace ClinicManagementSystem.Application.Features.Auth.Commands.CreateStaffA
                         }, cancellationToken);
                     }
                 }
-                var tempPassword = GenerateSecurePassword();
+
+                tempPassword = GenerateSecurePassword();
                 var result = await _identityService.CreateStaffAccountAsync(
                     request.Email, tempPassword, request.Role, request.EmployeeId);
+
                 if (!result.Succeeded)
                 {
                     await _unitOfWork.RollbackTransactionAsync();
                     throw new InvalidOperationException($"Failed to create staff account: {string.Join("; ", result.Errors)}");
                 }
+
                 await _unitOfWork.CommitTransactionAsync();
-                var emailBody = $"Hello {employee.FullName},\n\n" +
-                                $"An account has been created for you in the Clinic Management System as a {request.Role}.\n" +
-                                $"Your login email: {request.Email}\n" +
-                                $"Your temporary password: {tempPassword}\n\n" +
-                                $"Please log in and change your password immediately.";
-                await _emailService.SendEmailAsync(request.Email, "Welcome to Clinic Management System", emailBody);
-                return result.UserId;
+                userId = result.UserId;
             }
             catch
             {
@@ -82,6 +85,23 @@ namespace ClinicManagementSystem.Application.Features.Auth.Commands.CreateStaffA
                 throw;
             }
 
+
+            try
+            {
+                var emailBody = $"Hello {employee.FullName},\n\n" +
+                                $"An account has been created for you in the Clinic Management System as a {request.Role}.\n" +
+                                $"Your login email: {request.Email}\n" +
+                                $"Your temporary password: {tempPassword}\n\n" +
+                                $"Please log in and change your password immediately.";
+
+                await _emailService.SendEmailAsync(request.Email, "Welcome to Clinic Management System", emailBody);
+            }
+            catch
+            {
+
+            }
+
+            return userId;
         }
         private string GenerateSecurePassword()
         {

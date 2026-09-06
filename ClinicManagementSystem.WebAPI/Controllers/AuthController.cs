@@ -35,7 +35,7 @@ namespace ClinicManagementSystem.WebAPI.Controllers
 
 
         [HttpPost("create-staff")]
-        [Authorize(Roles =Roles.Admin)]
+       // [Authorize(Roles =Roles.Admin)]
         public async Task<IActionResult> CreateStaffAccount(CreateStaffAccountCommand command)
         {
             var userId = await _mediator.Send(command);

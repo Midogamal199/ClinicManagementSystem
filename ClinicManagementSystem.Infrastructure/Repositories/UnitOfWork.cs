@@ -24,7 +24,9 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         private ILeaveRequestRepository? _leaveRequestRepository;
         private IDepartmentRepository? _departmentRepository;
         private IInvoiceRepository? _invoiceRepository;
-        private IDbContextTransaction? _currentTransaction; 
+        private IDbContextTransaction? _currentTransaction;
+        private ISpecialtyRepository? _specialtyRepository;
+
         public IInvoiceRepository InvoiceRepository =>
     _invoiceRepository ??= new InvoiceRepository(_context);
         public UnitOfWork(ApplicationDbContext context)
@@ -50,6 +52,8 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
     _leaveRequestRepository ??= new LeaveRequestRepository(_context);
         public IDepartmentRepository DepartmentRepository =>
     _departmentRepository ??= new DepartmentRepository(_context);
+        public ISpecialtyRepository SpecialtyRepository =>
+    _specialtyRepository ??= new SpecialtyRepository(_context);
 
         public void Dispose()
         {
