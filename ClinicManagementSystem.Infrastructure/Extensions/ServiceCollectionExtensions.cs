@@ -47,6 +47,8 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
             services.Configure<MailtrapOptions>(configuration.GetSection("Mailtrap"));
             services.AddScoped<IEmailService, MailtrapEmailService>();
             services.AddScoped<IOtpService, OtpService>();
+            services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+            services.AddScoped<ITokenService, TokenService>();
             return services;
         }
     }

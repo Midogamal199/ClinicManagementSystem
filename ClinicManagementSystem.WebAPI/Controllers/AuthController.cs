@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using ClinicManagementSystem.Application.Features.Auth.Commands.CreateStaffAccount;
+using ClinicManagementSystem.Application.Features.Auth.Commands.Login;
 using ClinicManagementSystem.Application.Features.Auth.Commands.RequestRegistrationOtp;
 using ClinicManagementSystem.Application.Features.Auth.Commands.VerifyRegistration;
 using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
@@ -35,11 +37,18 @@ namespace ClinicManagementSystem.WebAPI.Controllers
 
 
         [HttpPost("create-staff")]
-       // [Authorize(Roles =Roles.Admin)]
+       [Authorize(Roles =Roles.Admin)]
         public async Task<IActionResult> CreateStaffAccount(CreateStaffAccountCommand command)
         {
             var userId = await _mediator.Send(command);
             return Ok(new { userId });
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return Ok(response);
         }
     }
 }

@@ -10,5 +10,7 @@ namespace ClinicManagementSystem.Application.Interfaces
         Task<bool> EmployeeHasAccountAsync(Guid employeeId);
         Task<AppIdentityResult> RegisterPatientAsync(string email, string password, Guid patientId);
         Task<AppIdentityResult> CreateStaffAccountAsync(string email, string password, string role, Guid employeeId);
+        Task<AppIdentityResult> LoginAsync(string email, string password);
+
     }
 }
