@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using ClinicManagementSystem.Application.Interfaces;
@@ -47,6 +48,17 @@ namespace ClinicManagementSystem.Infrastructure.Identity
                 Token = tokenString,
                 ExpiresAt = expiresAt
             });
+        }
+
+        public (string Token, DateTime ExpiresAt) GenerateRefreshToken()
+        {
+
+            var randomBytes = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomBytes);
+            var token = Convert.ToBase64String(randomBytes);
+            var expiresAt = DateTime.UtcNow.AddDays(_options.RefreshTokenExpirationDays);
+            return (token, expiresAt);
         }
     }
 }

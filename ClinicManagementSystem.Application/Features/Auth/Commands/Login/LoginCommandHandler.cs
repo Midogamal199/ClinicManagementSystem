@@ -29,10 +29,15 @@ namespace ClinicManagementSystem.Application.Features.Auth.Commands.Login
             }
             var userId= Guid.Parse(resualt.UserId);
             var generatedToken=await _tokenService.GenerateAccessTokenAsync(userId, request.Email, resualt.Roles);
+            var (refreshToken, refreshTokenExpiresAt) = _tokenService.GenerateRefreshToken();
+            await _identityService.StoreRefreshTokenAsync(userId, refreshToken, refreshTokenExpiresAt);
+
+
             return new LoginResponseDto
             {
                 Token = generatedToken.Token,
                 ExpiresAt = generatedToken.ExpiresAt,
+                RefreshToken = refreshToken,
                 UserId = userId,
                 Email = request.Email,
                 FullName = resualt.FullName,

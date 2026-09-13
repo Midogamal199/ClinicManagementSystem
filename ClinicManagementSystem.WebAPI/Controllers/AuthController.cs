@@ -1,12 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using ClinicManagementSystem.Application.Features.Auth.Commands.ChangePassword;
 using ClinicManagementSystem.Application.Features.Auth.Commands.CreateStaffAccount;
 using ClinicManagementSystem.Application.Features.Auth.Commands.Login;
+using ClinicManagementSystem.Application.Features.Auth.Commands.RefreshToken;
 using ClinicManagementSystem.Application.Features.Auth.Commands.RequestRegistrationOtp;
 using ClinicManagementSystem.Application.Features.Auth.Commands.VerifyRegistration;
 using ClinicManagementSystem.Infrastructure.Identity;
+using ClinicManagementSystem.WebAPI.Models;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
@@ -50,5 +54,31 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             var response = await _mediator.Send(command);
             return Ok(response);
         }
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenCommand command)
+        {
+            var response = await _mediator.Send(command);
+            return Ok(response);
+        }
+        [HttpPost("change-password")]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                    ?? User.FindFirst("sub")?.Value;
+            if (userIdClaim is null || !Guid.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized();
+            }
+            var command = new ChangePasswordCommand
+            {
+                UserId = userId,
+                CurrentPassword = request.CurrentPassword,
+                NewPassword = request.NewPassword
+            };
+            await _mediator.Send(command);
+            return NoContent();
+        }
+
     }
 }

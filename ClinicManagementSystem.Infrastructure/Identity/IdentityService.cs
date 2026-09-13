@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClinicManagementSystem.Application.Common.Models;
 using ClinicManagementSystem.Application.Interfaces;
+using ClinicManagementSystem.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,12 +15,35 @@ namespace ClinicManagementSystem.Infrastructure.Identity
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ApplicationDbContext _context;
 
 
-        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
+
+        }
+
+        public async Task<AppIdentityResult> ChangePasswordAsync(Guid userId, string currentPassword, string newPassword)
+        {
+           var user =await _userManager.FindByIdAsync(userId.ToString());
+            if (user is null)
+            {
+                return new AppIdentityResult { Succeeded = false, Errors = new List<string> { "User not found." } };
+            }
+            var resualt = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            if (!resualt.Succeeded)
+            {
+                return new AppIdentityResult
+                {
+                    Succeeded = false,
+                    Errors = resualt.Errors.Select(e => e.Description).ToList()
+                };
+            }
+            return new AppIdentityResult { Succeeded = true };
+
         }
 
         public async Task<AppIdentityResult> CreateStaffAccountAsync(string email, string password, string role, Guid employeeId)
@@ -51,6 +75,29 @@ namespace ClinicManagementSystem.Infrastructure.Identity
         public async Task<bool> EmployeeHasAccountAsync(Guid employeeId)
         {
             return await _userManager.Users.AnyAsync(u => u.EmployeeId == employeeId);
+        }
+
+        public async Task<AppIdentityResult> GetUserInfoAsync(Guid userId)
+        {
+            var user = await _userManager.Users
+                .Include(u => u.Employee)
+                .Include(u => u.Patient)
+                .FirstOrDefaultAsync(u => u.Id == userId);
+            if (user is null)
+            {
+                return new AppIdentityResult { Succeeded = false, Errors = new List<string> { "User not found." } };
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var fullName = user.Employee?.FullName ?? user.Patient?.FullName ?? user.Email!;
+            return new AppIdentityResult
+            {
+                Succeeded = true,
+                UserId = user.Id.ToString(),
+                Email = user.Email!,
+                FullName = fullName,
+                Roles = roles.ToList()
+            };
+
         }
 
         public async Task<AppIdentityResult> LoginAsync(string email, string password)
@@ -114,10 +161,64 @@ namespace ClinicManagementSystem.Infrastructure.Identity
             };
         }
 
+        public async Task RevokeAllUserTokensAsync(Guid userId)
+        {
+            var activeTokens = await _context.RefreshTokens
+                .Where(rt => rt.UserId == userId &&!rt.IsRevoked ).ToListAsync();
+            foreach (var token in activeTokens)
+            {
+                token.IsRevoked = true;
+                token.RevokedAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task StoreRefreshTokenAsync(Guid userId, string token, DateTime expiresAt)
+        {
+            var refreshToken = new RefreshToken
+            {
+                Id = Guid.NewGuid(),
+                Token = token,
+                UserId = userId,
+                ExpiresAt = expiresAt
+            };
+            _context.RefreshTokens.Add(refreshToken);
+            await _context.SaveChangesAsync();
+
+        }
+
         public async Task<bool> UserExistsAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             return user is not null;
+        }
+
+        public async Task<Guid?> ValidateAndConsumeRefreshTokenAsync(string token)
+        {
+            var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(t => t.Token == token);
+
+            if (storedToken is null)
+            {
+                return null;
+            }
+
+            if (storedToken.IsRevoked)
+            {
+                await RevokeAllUserTokensAsync(storedToken.UserId);
+                return null;
+            }
+
+            if (storedToken.ExpiresAt < DateTime.UtcNow)
+            {
+                return null;
+            }
+
+            storedToken.IsRevoked = true;
+            storedToken.RevokedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return storedToken.UserId;
         }
     }
 }

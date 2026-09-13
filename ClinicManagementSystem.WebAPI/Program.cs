@@ -77,6 +77,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// 3. تسجيل الـ Authorization صراحة — بدونها الـ DI Container مش هيلاقي IAuthorizationService
+// وأي [Authorize(Roles = ...)] هيفشل وقت الـ Runtime
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -87,6 +91,24 @@ using (var scope = app.Services.CreateScope())
         if (!await roleManager.RoleExistsAsync(roleName))
         {
             await roleManager.CreateAsync(new IdentityRole<Guid>(roleName));
+        }
+
+    }
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var adminExists = await userManager.GetUsersInRoleAsync(Roles.Admin);
+    if (adminExists.Count == 0)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName = "admin@clinic.com",
+            Email = "admin@clinic.com",
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "Admin@1234");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, Roles.Admin);
         }
     }
 }

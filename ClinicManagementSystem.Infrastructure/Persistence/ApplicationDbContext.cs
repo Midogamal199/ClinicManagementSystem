@@ -35,6 +35,7 @@ namespace ClinicManagementSystem.Infrastructure.Persistence
         public DbSet<LeaveRequest> LeaveRequests { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
