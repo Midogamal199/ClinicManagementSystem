@@ -77,6 +77,12 @@ namespace ClinicManagementSystem.Infrastructure.Identity
             return await _userManager.Users.AnyAsync(u => u.EmployeeId == employeeId);
         }
 
+        public async Task<Guid?> GetUserIdByEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user?.Id;
+        }
+
         public async Task<AppIdentityResult> GetUserInfoAsync(Guid userId)
         {
             var user = await _userManager.Users
@@ -159,6 +165,36 @@ namespace ClinicManagementSystem.Infrastructure.Identity
                 Succeeded = true,
                 UserId = user.Id.ToString()
             };
+        }
+
+        public async Task<AppIdentityResult> ResetPasswordAsync(string email, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user is null)
+            {
+                return new AppIdentityResult { Succeeded = false, Errors = new List<string> { "User not found." } };
+            }
+            var removeResult = await _userManager.RemovePasswordAsync(user);
+            if (!removeResult.Succeeded)
+            {
+                return new AppIdentityResult
+                {
+                    Succeeded = false,
+                    Errors = removeResult.Errors.Select(e => e.Description).ToList()
+                };
+            }
+            var addResult = await _userManager.AddPasswordAsync(user, newPassword);
+            if (!addResult.Succeeded)
+            {
+                return new AppIdentityResult
+                {
+                    Succeeded = false,
+                    Errors = addResult.Errors.Select(e => e.Description).ToList()
+                };
+            }
+            await _userManager.UpdateSecurityStampAsync(user);
+            return new AppIdentityResult { Succeeded = true };
+
         }
 
         public async Task RevokeAllUserTokensAsync(Guid userId)

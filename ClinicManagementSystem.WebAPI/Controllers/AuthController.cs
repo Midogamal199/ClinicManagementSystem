@@ -2,9 +2,11 @@
 using System.Threading.Tasks;
 using ClinicManagementSystem.Application.Features.Auth.Commands.ChangePassword;
 using ClinicManagementSystem.Application.Features.Auth.Commands.CreateStaffAccount;
+using ClinicManagementSystem.Application.Features.Auth.Commands.ForgotPassword;
 using ClinicManagementSystem.Application.Features.Auth.Commands.Login;
 using ClinicManagementSystem.Application.Features.Auth.Commands.RefreshToken;
 using ClinicManagementSystem.Application.Features.Auth.Commands.RequestRegistrationOtp;
+using ClinicManagementSystem.Application.Features.Auth.Commands.ResetPassword;
 using ClinicManagementSystem.Application.Features.Auth.Commands.VerifyRegistration;
 using ClinicManagementSystem.Infrastructure.Identity;
 using ClinicManagementSystem.WebAPI.Models;
@@ -37,7 +39,7 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             var userId = await _mediator.Send(command);
             return Ok(new { userId });
         }
-
+         
 
 
         [HttpPost("create-staff")]
@@ -78,6 +80,18 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             };
             await _mediator.Send(command);
             return NoContent();
+        }
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok(new { message = "If the email is registered, a password reset code has been sent." });
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok(new { message = "Password has been reset successfully. Please log in with your new password." });
         }
 
     }

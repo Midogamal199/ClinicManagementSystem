@@ -16,6 +16,8 @@ namespace ClinicManagementSystem.Application.Interfaces
         Task StoreRefreshTokenAsync(Guid userId, string token, DateTime expiresAt);
         Task<Guid?> ValidateAndConsumeRefreshTokenAsync(string token);
         Task RevokeAllUserTokensAsync(Guid userId);
+        Task<Guid?> GetUserIdByEmailAsync(string email);
+        Task<AppIdentityResult> ResetPasswordAsync(string email, string newPassword);
 
 
     }
