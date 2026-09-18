@@ -3,13 +3,16 @@ using ClinicManagementSystem.Application.Features.Patients.Commands.DeletePatien
 using ClinicManagementSystem.Application.Features.Patients.Commands.UpdatePatient;
 using ClinicManagementSystem.Application.Features.Patients.Queries.GetAllPatients;
 using ClinicManagementSystem.Application.Features.Patients.Queries.GetPatientById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
-        [Route("api/[controller]")]
+    [Route("api/[controller]")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
 
     public class PatientController: ControllerBase
     {
@@ -20,6 +23,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             _mediator = mediator;
         }
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+
         public async Task<IActionResult> Create([FromBody] CreatePatientCommand command) 
         {
             var patientId = await _mediator.Send(command);
@@ -28,6 +33,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
 
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdatePatientCommand command)
         {
             if (id != command.Id)
@@ -39,6 +46,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
 
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+
         public async Task<IActionResult> Delete(Guid id)
         {
             await _mediator.Send(new DeletePatientCommand { Id = id });

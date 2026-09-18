@@ -3,13 +3,17 @@ using ClinicManagementSystem.Application.Features.LeaveRequests.Commands.CreateL
 using ClinicManagementSystem.Application.Features.LeaveRequests.Commands.RejectLeaveRequest;
 using ClinicManagementSystem.Application.Features.LeaveRequests.Queries.GetAllLeaveRequests;
 using ClinicManagementSystem.Application.Features.LeaveRequests.Queries.GetLeaveRequestById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    
+
     public class LeaveRequestController: ControllerBase
     {
         private readonly IMediator _mediator;
@@ -19,24 +23,29 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             _mediator = mediator;
         }
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
         public async Task<IActionResult> Create([FromBody] CreateLeaveRequestCommand command)
         {
             var leaveRequestId = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetById), new { id = leaveRequestId }, new { id = leaveRequestId });
         }
         [HttpPost("{id}/approve")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Approve(Guid id)
         {
             await _mediator.Send(new ApproveLeaveRequestCommand(id));
             return NoContent();
         }
         [HttpPost("{id}/reject")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Reject(Guid id)
         {
             await _mediator.Send(new RejectLeaveRequestCommand(id));
             return NoContent();
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
+
         public async Task<IActionResult> GetById(Guid id)
         {
             var leaveRequest = await _mediator.Send(new GetLeaveRequestByIdQuery(id));
@@ -44,6 +53,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
+
         public async Task<IActionResult> GetAll([FromQuery] GetAllLeaveRequestsQuery query)
         {
             var result = await _mediator.Send(query);

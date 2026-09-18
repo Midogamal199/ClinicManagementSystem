@@ -3,13 +3,16 @@ using ClinicManagementSystem.Application.Features.Departments.Commands.DeleteDep
 using ClinicManagementSystem.Application.Features.Departments.Commands.UpdateDepartment;
 using ClinicManagementSystem.Application.Features.Departments.Queries.GetAllDepartments;
 using ClinicManagementSystem.Application.Features.Departments.Queries.GetDepartmentById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = Roles.Admin)]
     public class DepartmentController : ControllerBase
     {
         private readonly IMediator _mediator;

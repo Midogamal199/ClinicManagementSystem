@@ -1,13 +1,17 @@
 ﻿using ClinicManagementSystem.Application.Features.Invoices.Commands.CreateInvoice;
 using ClinicManagementSystem.Application.Features.Invoices.Queries.GetAllInvoices;
 using ClinicManagementSystem.Application.Features.Invoices.Queries.GetInvoiceById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+
     public class InvoiceController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -18,6 +22,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+
         public async Task<IActionResult> Create([FromBody] CreateInvoiceCommand command)
         {
             var invoiceId = await _mediator.Send(command);
@@ -32,6 +38,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+
         public async Task<IActionResult> GetAll([FromQuery] GetAllInvoicesQuery query)
         {
             var result = await _mediator.Send(query);

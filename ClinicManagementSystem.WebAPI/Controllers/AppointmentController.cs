@@ -3,13 +3,16 @@ using ClinicManagementSystem.Application.Features.Appointments.Commands.DeleteAp
 using ClinicManagementSystem.Application.Features.Appointments.Commands.UpdateAppointment;
 using ClinicManagementSystem.Application.Features.Appointments.Queries.GetAllAppointments;
 using ClinicManagementSystem.Application.Features.Appointments.Queries.GetAppointmentById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AppointmentController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -25,6 +28,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = appointmentId }, new { id = appointmentId });
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
+
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateAppointmentCommand command)
         {
             if (id != command.Id)
@@ -36,6 +41,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+
         public async Task<IActionResult> Delete(Guid id)
         {
             await _mediator.Send(new DeleteAppointmentCommand { Id = id });
@@ -49,6 +56,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
+
         public async Task<IActionResult> GetAll([FromQuery] GetAllAppointmentsQuery query)
         {
             var result = await _mediator.Send(query);

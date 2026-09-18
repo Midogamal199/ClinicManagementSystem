@@ -6,13 +6,16 @@ using ClinicManagementSystem.Application.Features.Specialties.Commands.UpdateSpe
 using ClinicManagementSystem.Application.Features.Specialties.Queries.GetAllSpecialties;
 using ClinicManagementSystem.Application.Features.Specialties.Queries.GetDoctorsBySpecialty;
 using ClinicManagementSystem.Application.Features.Specialties.Queries.GetSpecialtyById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/Specialization")]
+    [Authorize]
     public class SpecialtyController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -30,6 +33,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> Create(CreateSpecialtyCommand command)
         {
             var id = await _mediator.Send(command);
@@ -37,6 +42,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> Update(Guid id, UpdateSpecialtyCommand command)
         {
             if (id != command.Id)
@@ -49,6 +56,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> Delete(Guid id)
         {
             await _mediator.Send(new DeleteSpecialtyCommand { Id = id });

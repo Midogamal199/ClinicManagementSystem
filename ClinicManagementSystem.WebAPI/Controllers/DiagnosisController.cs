@@ -1,13 +1,17 @@
 ﻿using ClinicManagementSystem.Application.Features.Diagnoses.Commands.CreateDiagnosis;
 using ClinicManagementSystem.Application.Features.Diagnoses.Queries.GetDiagnosesByVisit;
 using ClinicManagementSystem.Application.Features.Diagnoses.Queries.GetDiagnosisById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
+
     public class DiagnosisController:ControllerBase
     {
         private readonly IMediator _mediator;
@@ -17,6 +21,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             _mediator = mediator;
         }
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor}")]
+
         public async Task<IActionResult> Create([FromBody] CreateDiagnosisCommand command)
         {
             var diagnosisId = await _mediator.Send(command);

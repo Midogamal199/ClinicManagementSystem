@@ -3,13 +3,17 @@ using ClinicManagementSystem.Application.Features.Attendances.Commands.CheckOut;
 using ClinicManagementSystem.Application.Features.Attendances.Queries.GetAllAttendances;
 using ClinicManagementSystem.Application.Features.Attendances.Queries.GetAttendanceById;
 using ClinicManagementSystem.Application.Features.Attendances.Queries.GetWorkingHours;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = Roles.Admin)]
+
     public class AttendanceController : ControllerBase
     {
         private readonly IMediator _mediator;

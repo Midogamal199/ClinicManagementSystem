@@ -4,13 +4,16 @@ using ClinicManagementSystem.Application.Features.Employees.Commands.UpdateEmplo
 using ClinicManagementSystem.Application.Features.Employees.Queries.GetAllEmployees;
 using ClinicManagementSystem.Application.Features.Employees.Queries.GetEmployeeById;
 using ClinicManagementSystem.Application.Features.Employees.Queries.GetRemainingLeaveDays;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = Roles.Admin)]
     public class EmployeeController: ControllerBase
     {
         private readonly IMediator _mediator;

@@ -1,13 +1,17 @@
 ﻿using ClinicManagementSystem.Application.Features.Payments.Commands.CreatePayment;
 using ClinicManagementSystem.Application.Features.Payments.Commands.InitiateOnlinePayment;
 using ClinicManagementSystem.Application.Features.Payments.Queries.GetPaymentsByInvoice;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+
     public class PaymentController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -31,6 +35,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             return Ok(payments);
         }
         [HttpPost("online/initiate")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist},{Roles.Patient}")]
+
         public async Task<IActionResult> InitiateOnlinePayment([FromBody] InitiateOnlinePaymentCommand command)
         {
             var checkoutUrl = await _mediator.Send(command);

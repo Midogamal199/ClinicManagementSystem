@@ -3,13 +3,17 @@ using ClinicManagementSystem.Application.Features.Doctors.Commands.DeleteDoctor;
 using ClinicManagementSystem.Application.Features.Doctors.Commands.UpdateDoctor;
 using ClinicManagementSystem.Application.Features.Doctors.Queries.GetAllDoctors;
 using ClinicManagementSystem.Application.Features.Doctors.Queries.GetDoctorById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
+
     public class DoctorController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -19,6 +23,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             _mediator = mediator;
         }
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> Create([FromBody] CreateDoctorCommand command)
         {
             var doctorId = await _mediator.Send(command);
@@ -26,6 +32,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
 
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateDoctorCommand command)
         {
             if (id != command.Id)
@@ -36,6 +44,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             return NoContent();
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> Delete(Guid id)
         {
             var doctor = await _mediator.Send(new DeleteDoctorCommand { Id = id });

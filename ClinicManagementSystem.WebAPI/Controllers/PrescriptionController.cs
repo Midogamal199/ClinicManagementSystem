@@ -1,7 +1,9 @@
 ﻿using ClinicManagementSystem.Application.Features.Prescriptions.Commands.CreatePrescription;
 using ClinicManagementSystem.Application.Features.Prescriptions.Queries.GetPrescriptionById;
 using ClinicManagementSystem.Application.Features.Prescriptions.Queries.GetPrescriptionsByVisit;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
@@ -9,6 +11,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
+
     public class PrescriptionController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -18,6 +22,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             _mediator = mediator;
         }
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor}")]
+
         public async Task<IActionResult> Create([FromBody] CreatePrescriptionCommand command)
         {
             var prescriptionId = await _mediator.Send(command);

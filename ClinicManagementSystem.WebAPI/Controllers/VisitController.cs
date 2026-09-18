@@ -1,13 +1,17 @@
 ﻿using ClinicManagementSystem.Application.Features.Visits.Commands.CreateVisit;
 using ClinicManagementSystem.Application.Features.Visits.Queries.GetAllVisitsQuery;
 using ClinicManagementSystem.Application.Features.Visits.Queries.GetVisitById;
+using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist}")]
+
     public class VisitController: ControllerBase
     {
         private readonly IMediator _mediator;
@@ -18,6 +22,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor}")]
+
         public async Task<IActionResult> Create([FromBody] CreateVisitCommand command)
         {
             var visitId = await _mediator.Send(command);
