@@ -28,7 +28,7 @@ namespace ClinicManagementSystem.Application.Features.Auth.Commands.Login
                 throw new UnauthorizedAccessException(string.Join("; ", resualt.Errors));
             }
             var userId= Guid.Parse(resualt.UserId);
-            var generatedToken=await _tokenService.GenerateAccessTokenAsync(userId, request.Email, resualt.Roles);
+            var generatedToken=await _tokenService.GenerateAccessTokenAsync(userId, request.Email, resualt.Roles, resualt.PatientId, resualt.EmployeeId);
             var (refreshToken, refreshTokenExpiresAt) = _tokenService.GenerateRefreshToken();
             await _identityService.StoreRefreshTokenAsync(userId, refreshToken, refreshTokenExpiresAt);
 

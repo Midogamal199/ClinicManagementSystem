@@ -101,7 +101,9 @@ namespace ClinicManagementSystem.Infrastructure.Identity
                 UserId = user.Id.ToString(),
                 Email = user.Email!,
                 FullName = fullName,
-                Roles = roles.ToList()
+                Roles = roles.ToList(),
+                PatientId = user.PatientId,
+                EmployeeId = user.EmployeeId
             };
 
         }
@@ -133,7 +135,9 @@ namespace ClinicManagementSystem.Infrastructure.Identity
                 Succeeded = true,
                 UserId = user.Id.ToString(),
                 FullName = fullName,
-                Roles = roles.ToList()
+                Roles = roles.ToList(),
+                PatientId = user.PatientId,
+                EmployeeId = user.EmployeeId
             };
         }
         public async Task<bool> PatientHasAccountAsync(Guid patientId)

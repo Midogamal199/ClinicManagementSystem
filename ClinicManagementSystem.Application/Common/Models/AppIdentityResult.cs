@@ -11,5 +11,7 @@ namespace ClinicManagementSystem.Application.Common.Models
         public string FullName { get; set; } = string.Empty;
         public List<string> Roles { get; set; } = new();
         public List<string> Errors { get; set; } = new();
+        public Guid? PatientId { get; set; }
+        public Guid? EmployeeId { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace ClinicManagementSystem.Application.Interfaces
 
     public interface ITokenService
     {
-        Task<GeneratedToken> GenerateAccessTokenAsync(Guid userId, string email, IList<string> roles);
+        Task<GeneratedToken> GenerateAccessTokenAsync(Guid userId, string email, IList<string> roles, Guid? patientId, Guid? employeeId);
         (string Token, DateTime ExpiresAt) GenerateRefreshToken();
 
     }

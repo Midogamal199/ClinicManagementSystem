@@ -1,8 +1,11 @@
 ﻿using System.Security.Claims;
 using System.Text;
 using ClinicManagementSystem.Application.Extensions;
+using ClinicManagementSystem.Application.Interfaces; // <-- إضافة using للانترفيس
 using ClinicManagementSystem.Infrastructure.Extensions;
 using ClinicManagementSystem.Infrastructure.Identity;
+using ClinicManagementSystem.WebAPI.Middleware;
+using ClinicManagementSystem.WebAPI.Services;       // <-- إضافة using للـ CurrentUserService
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -13,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// إعداد Swagger لدعم توثيق الـ JWT وتفعيل زر Authorize
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Clinic Management System API", Version = "v1" });
@@ -44,11 +46,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// 1. تسجيل خدمات التطبيق والـ Infrastructure أولاً
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-// 2. تسجيل إعدادات الـ JWT والـ Authentication بعد Identity لضمان عدم استبدال الـ Default Schemes
+// --- تسجيل الـ CurrentUserService والـ HttpContextAccessor ---
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 builder.Services.Configure<JwtOptions>(jwtSettings);
 
@@ -77,11 +81,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 3. تسجيل الـ Authorization صراحة — بدونها الـ DI Container مش هيلاقي IAuthorizationService
-// وأي [Authorize(Roles = ...)] هيفشل وقت الـ Runtime
 builder.Services.AddAuthorization();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -92,7 +99,6 @@ using (var scope = app.Services.CreateScope())
         {
             await roleManager.CreateAsync(new IdentityRole<Guid>(roleName));
         }
-
     }
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
     var adminExists = await userManager.GetUsersInRoleAsync(Roles.Admin);
