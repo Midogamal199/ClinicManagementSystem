@@ -10,7 +10,7 @@ namespace ClinicManagementSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
+    [Authorize]
 
     public class PaymentController : ControllerBase
     {
@@ -22,6 +22,7 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist}")]
         public async Task<IActionResult> Create([FromBody] CreatePaymentCommand command)
         {
             var paymentId = await _mediator.Send(command);
@@ -29,6 +30,8 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         }
 
         [HttpGet("by-invoice/{invoiceId}")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Receptionist},{Roles.Patient}")]
+
         public async Task<IActionResult> GetByInvoice(Guid invoiceId)
         {
             var payments = await _mediator.Send(new GetPaymentsByInvoiceQuery(invoiceId));

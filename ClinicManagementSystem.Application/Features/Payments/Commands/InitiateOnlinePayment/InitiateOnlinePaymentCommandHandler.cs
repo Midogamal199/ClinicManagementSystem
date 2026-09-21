@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicManagementSystem.Application.Common.Exceptions;
 using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Domain.Entities;
 using ClinicManagementSystem.Domain.Enums;
@@ -15,13 +16,16 @@ namespace ClinicManagementSystem.Application.Features.Payments.Commands.Initiate
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPaymentGatewayService _paymentGatewayService;
+        private readonly ICurrentUserService _currentUserService;
 
         public InitiateOnlinePaymentCommandHandler(
             IUnitOfWork unitOfWork,
-            IPaymentGatewayService paymentGatewayService)
+            IPaymentGatewayService paymentGatewayService,
+            ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
             _paymentGatewayService = paymentGatewayService;
+            _currentUserService = currentUserService;
         }
         public async Task<string> Handle(InitiateOnlinePaymentCommand request, CancellationToken cancellationToken)
         {
@@ -29,6 +33,10 @@ namespace ClinicManagementSystem.Application.Features.Payments.Commands.Initiate
             if (invoice is null)
             {
                 throw new KeyNotFoundException($"Invoice with Id '{request.InvoiceId}' was not found.");
+            }
+            if (_currentUserService.IsInRole("Patient") && invoice.PatientId != _currentUserService.PatientId)
+            {
+                throw new ForbiddenAccessException("You are not allowed to initiate payment for an invoice that does not belong to you.");
             }
             if (invoice.Status == InvoiceStatus.Paid)
             {

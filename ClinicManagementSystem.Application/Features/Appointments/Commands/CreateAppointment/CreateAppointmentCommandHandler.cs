@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicManagementSystem.Application.Common.Exceptions;
+using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Domain.Entities;
 using ClinicManagementSystem.Domain.Enums;
 using ClinicManagementSystem.Domain.Interfaces;
@@ -13,14 +15,33 @@ namespace ClinicManagementSystem.Application.Features.Appointments.Commands.Crea
     public class CreateAppointmentCommandHandler : IRequestHandler<CreateAppointmentCommand, Guid>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICurrentUserService _currentUserService;
 
-        public CreateAppointmentCommandHandler(IUnitOfWork unitOfWork)
+        public CreateAppointmentCommandHandler(
+            IUnitOfWork unitOfWork,
+            ICurrentUserService currentUserService)
         {
             _unitOfWork = unitOfWork;
+            _currentUserService = currentUserService;
         }
         public async Task<Guid> Handle(CreateAppointmentCommand request, CancellationToken cancellationToken)
         {
-            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(request.PatientId);
+            var targetPatientId =request.PatientId;
+            if (_currentUserService.IsInRole("Patient")) 
+            {
+                if (!_currentUserService.PatientId.HasValue)
+                {
+                    throw new ForbiddenAccessException("No patient profile linked to this user.");
+                }
+                if (request.PatientId != Guid.Empty && request.PatientId != _currentUserService.PatientId.Value)
+                {
+                    throw new ForbiddenAccessException("You cannot book an appointment for another patient.");
+                }
+
+                targetPatientId = _currentUserService.PatientId.Value;
+            
+                }
+            var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(targetPatientId);
             if (patient == null)
             {
                 throw new Exception("Patient not found");
@@ -38,7 +59,7 @@ namespace ClinicManagementSystem.Application.Features.Appointments.Commands.Crea
             }
             var appointment = new Appointment
             {
-            PatientId = request.PatientId,
+                PatientId = targetPatientId,
             DoctorId = request.DoctorId,
                 ScheduledAt = request.ScheduledAt,
                 Status =AppointmentStatus.Scheduled
