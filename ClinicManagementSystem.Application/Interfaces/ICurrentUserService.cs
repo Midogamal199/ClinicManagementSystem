@@ -10,5 +10,6 @@ namespace ClinicManagementSystem.Application.Interfaces
         Guid? EmployeeId { get; }
         IReadOnlyList<string> Roles { get; }
         bool IsInRole(string role);
+        Guid? DoctorId { get; }
     }
 }

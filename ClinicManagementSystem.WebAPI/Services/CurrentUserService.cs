@@ -46,6 +46,15 @@ namespace ClinicManagementSystem.WebAPI.Services
         public IReadOnlyList<string> Roles =>
             _user?.FindAll(ClaimTypes.Role).Select(c => c.Value).ToList() ?? new List<string>();
 
+        public Guid? DoctorId
+        {
+            get
+            {
+                var value = _user?.FindFirst("DoctorId")?.Value;
+                return Guid.TryParse(value, out var id) ? id : null;
+            }
+        }
+
         public bool IsInRole(string role) => _user?.IsInRole(role) ?? false;
 
     }

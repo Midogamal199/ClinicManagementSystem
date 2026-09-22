@@ -13,5 +13,6 @@ namespace ClinicManagementSystem.Application.Common.Models
         public List<string> Errors { get; set; } = new();
         public Guid? PatientId { get; set; }
         public Guid? EmployeeId { get; set; }
+        public Guid? DoctorId { get; set; }
     }
 }

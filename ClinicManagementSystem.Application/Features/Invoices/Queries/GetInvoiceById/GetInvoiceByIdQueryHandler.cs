@@ -25,7 +25,7 @@ namespace ClinicManagementSystem.Application.Features.Invoices.Queries.GetInvoic
             {
                 throw new KeyNotFoundException($"Invoice with Id '{request.Id}' was not found.");
             }
-            if (_currentUserService.IsInRole("Patient") && invoice.PatientId != _currentUserService.UserId)
+            if (_currentUserService.IsInRole("Patient") && invoice.PatientId != _currentUserService.PatientId)
             {
                 throw new ForbiddenAccessException("You are not allowed to view an invoice that does not belong to you.");
             }

@@ -95,6 +95,9 @@ namespace ClinicManagementSystem.Infrastructure.Identity
             }
             var roles = await _userManager.GetRolesAsync(user);
             var fullName = user.Employee?.FullName ?? user.Patient?.FullName ?? user.Email!;
+            var doctorId = user.EmployeeId is not null
+        ? (await _context.Doctors.FirstOrDefaultAsync(d => d.EmployeeId == user.EmployeeId))?.Id
+        : null;
             return new AppIdentityResult
             {
                 Succeeded = true,
@@ -103,7 +106,8 @@ namespace ClinicManagementSystem.Infrastructure.Identity
                 FullName = fullName,
                 Roles = roles.ToList(),
                 PatientId = user.PatientId,
-                EmployeeId = user.EmployeeId
+                EmployeeId = user.EmployeeId,
+                DoctorId = doctorId
             };
 
         }
@@ -130,6 +134,9 @@ namespace ClinicManagementSystem.Infrastructure.Identity
             }
             var roles = await _userManager.GetRolesAsync(user);
             var fullName = user.Employee?.FullName ?? user.Patient?.FullName ?? user.Email!;
+            var doctorId = user.EmployeeId is not null
+        ? (await _context.Doctors.FirstOrDefaultAsync(d => d.EmployeeId == user.EmployeeId))?.Id
+        : null;
             return new AppIdentityResult
             {
                 Succeeded = true,
@@ -137,7 +144,8 @@ namespace ClinicManagementSystem.Infrastructure.Identity
                 FullName = fullName,
                 Roles = roles.ToList(),
                 PatientId = user.PatientId,
-                EmployeeId = user.EmployeeId
+                EmployeeId = user.EmployeeId,
+                DoctorId = doctorId
             };
         }
         public async Task<bool> PatientHasAccountAsync(Guid patientId)

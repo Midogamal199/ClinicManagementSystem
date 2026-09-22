@@ -20,7 +20,7 @@ namespace ClinicManagementSystem.Infrastructure.Identity
         {
             _options = options.Value;
         }
-        public  Task<GeneratedToken> GenerateAccessTokenAsync(Guid userId, string email, IList<string> roles, Guid? patientId, Guid? employeeId)
+        public  Task<GeneratedToken> GenerateAccessTokenAsync(Guid userId, string email, IList<string> roles, Guid? patientId, Guid? employeeId, Guid? doctorId)
         {
             var claims = new List<Claim>
             {
@@ -36,6 +36,10 @@ namespace ClinicManagementSystem.Infrastructure.Identity
             if (employeeId is not null)
             {
                 claims.Add(new Claim("EmployeeId", employeeId.Value.ToString()));
+            }
+            if (doctorId is not null)
+            {
+                claims.Add(new Claim("DoctorId", doctorId.Value.ToString()));
             }
             foreach (var role in roles)
             {

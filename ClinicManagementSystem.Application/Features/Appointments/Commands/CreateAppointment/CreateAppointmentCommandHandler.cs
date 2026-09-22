@@ -44,7 +44,7 @@ namespace ClinicManagementSystem.Application.Features.Appointments.Commands.Crea
             var patient = await _unitOfWork.Repository<Patient>().GetByIdAsync(targetPatientId);
             if (patient == null)
             {
-                throw new Exception("Patient not found");
+                throw new KeyNotFoundException("Patient not found.");
             }
             var doctor = await _unitOfWork.Repository<Doctor>().GetByIdAsync(request.DoctorId);
             if (doctor is null)

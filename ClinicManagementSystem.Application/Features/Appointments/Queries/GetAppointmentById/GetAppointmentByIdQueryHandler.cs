@@ -38,7 +38,7 @@ namespace ClinicManagementSystem.Application.Features.Appointments.Queries.GetAp
             {
                 throw new ForbiddenAccessException("You are not allowed to view an appointment that does not belong to you.");
             }
-            if (_currentUserService.IsInRole("Doctor") && appointment.DoctorId != _currentUserService.EmployeeId)
+            if (_currentUserService.IsInRole("Doctor") && appointment.DoctorId != _currentUserService.DoctorId)
             {
                 throw new ForbiddenAccessException("You are not allowed to view an appointment assigned to another doctor.");
             }

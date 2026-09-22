@@ -31,7 +31,7 @@ namespace ClinicManagementSystem.Application.Features.Auth.Commands.RefreshToken
             {
                 throw new UnauthorizedAccessException("User no longer exists.");
             }
-            var generatedToken = await _tokenService.GenerateAccessTokenAsync(userId.Value, userInfo.Email, userInfo.Roles, userInfo.PatientId, userInfo.EmployeeId);
+            var generatedToken = await _tokenService.GenerateAccessTokenAsync(userId.Value, userInfo.Email, userInfo.Roles, userInfo.PatientId, userInfo.EmployeeId, userInfo.DoctorId);
             var (newRefreshToken, refreshTokenExpiresAt) = _tokenService.GenerateRefreshToken();
             await _identityService.StoreRefreshTokenAsync(userId.Value, newRefreshToken, refreshTokenExpiresAt);
             return new LoginResponseDto
