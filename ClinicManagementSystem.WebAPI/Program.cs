@@ -1,17 +1,22 @@
 ﻿using System.Security.Claims;
 using System.Text;
 using ClinicManagementSystem.Application.Extensions;
-using ClinicManagementSystem.Application.Interfaces; // <-- إضافة using للانترفيس
+using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Infrastructure.Extensions;
 using ClinicManagementSystem.Infrastructure.Identity;
 using ClinicManagementSystem.WebAPI.Middleware;
-using ClinicManagementSystem.WebAPI.Services;       // <-- إضافة using للـ CurrentUserService
+using ClinicManagementSystem.WebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Host.UseSerilog((context, configuration) =>
+    configuration.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
