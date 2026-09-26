@@ -22,6 +22,7 @@ namespace ClinicManagementSystem.Domain.Interfaces
         IInvoiceRepository InvoiceRepository { get; }
         IDepartmentRepository DepartmentRepository { get; }
         ISpecialtyRepository SpecialtyRepository { get; }
+        ILabTestRepository LabTestRepository { get; }
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();

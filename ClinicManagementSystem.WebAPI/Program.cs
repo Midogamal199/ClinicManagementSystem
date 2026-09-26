@@ -6,6 +6,7 @@ using ClinicManagementSystem.Infrastructure.Extensions;
 using ClinicManagementSystem.Infrastructure.Identity;
 using ClinicManagementSystem.WebAPI.Middleware;
 using ClinicManagementSystem.WebAPI.Services;
+using ClinicManagementSystem.WebAPI.Swagger;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -13,7 +14,6 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 builder.Host.UseSerilog((context, configuration) =>
     configuration.ReadFrom.Configuration(context.Configuration));
@@ -49,6 +49,8 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+
+    c.OperationFilter<SwaggerFileOperationFilter>();
 });
 
 builder.Services.AddApplicationServices();
@@ -94,6 +96,7 @@ builder.Services.AddProblemDetails();
 var app = builder.Build();
 
 app.UseExceptionHandler();
+app.UseStaticFiles();
 
 using (var scope = app.Services.CreateScope())
 {

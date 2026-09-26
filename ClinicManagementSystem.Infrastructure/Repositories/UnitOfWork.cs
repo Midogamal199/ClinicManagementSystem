@@ -26,6 +26,8 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         private IInvoiceRepository? _invoiceRepository;
         private IDbContextTransaction? _currentTransaction;
         private ISpecialtyRepository? _specialtyRepository;
+        private ILabTestRepository? _labTestRepository;
+
 
         public IInvoiceRepository InvoiceRepository =>
     _invoiceRepository ??= new InvoiceRepository(_context);
@@ -54,6 +56,8 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
     _departmentRepository ??= new DepartmentRepository(_context);
         public ISpecialtyRepository SpecialtyRepository =>
     _specialtyRepository ??= new SpecialtyRepository(_context);
+        public ILabTestRepository LabTestRepository =>
+    _labTestRepository ??= new LabTestRepository(_context);
 
         public void Dispose()
         {
