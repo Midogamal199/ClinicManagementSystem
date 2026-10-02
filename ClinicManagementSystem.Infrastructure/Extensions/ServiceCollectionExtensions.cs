@@ -50,6 +50,7 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
             services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IFileStorageService, LocalFileStorageService>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();
             return services;
         }
     }

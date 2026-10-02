@@ -4,6 +4,7 @@ using ClinicManagementSystem.Application.Extensions;
 using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Infrastructure.Extensions;
 using ClinicManagementSystem.Infrastructure.Identity;
+using ClinicManagementSystem.Infrastructure.Persistence;
 using ClinicManagementSystem.WebAPI.Middleware;
 using ClinicManagementSystem.WebAPI.Services;
 using ClinicManagementSystem.WebAPI.Swagger;
@@ -20,6 +21,11 @@ builder.Host.UseSerilog((context, configuration) =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddMemoryCache();
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>();
 
 builder.Services.AddSwaggerGen(c =>
 {
@@ -56,7 +62,6 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
-// --- تسجيل الـ CurrentUserService والـ HttpContextAccessor ---
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
@@ -137,6 +142,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health");
 
 app.MapControllers();
 
