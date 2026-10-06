@@ -8,6 +8,7 @@ using ClinicManagementSystem.Domain.Entities;
 using ClinicManagementSystem.Domain.Enums;
 using ClinicManagementSystem.Domain.Interfaces;
 using MediatR;
+using Hangfire;
 
 namespace ClinicManagementSystem.Application.Features.LabTests.Commands.UploadLabTestResult
 {
@@ -39,6 +40,8 @@ namespace ClinicManagementSystem.Application.Features.LabTests.Commands.UploadLa
             labTest.Status = LabTestStatus.Completed;
             _unitOfWork.Repository<LabTest>().Update(labTest);
             await _unitOfWork.SaveChangesAsync();
+            BackgroundJob.Enqueue<ILabTestNotificationJob>(
+            job => job.SendResultUploadedNotificationAsync(labTest.Id));
             return Unit.Value;
 
 

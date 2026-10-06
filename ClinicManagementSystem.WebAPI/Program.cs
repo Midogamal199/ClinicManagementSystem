@@ -5,9 +5,11 @@ using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Infrastructure.Extensions;
 using ClinicManagementSystem.Infrastructure.Identity;
 using ClinicManagementSystem.Infrastructure.Persistence;
+using ClinicManagementSystem.WebAPI.Filters;
 using ClinicManagementSystem.WebAPI.Middleware;
 using ClinicManagementSystem.WebAPI.Services;
 using ClinicManagementSystem.WebAPI.Swagger;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -142,6 +144,23 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// ---------------- Hangfire Dashboard & Recurring Jobs ----------------
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new HangfireAuthorizationFilter() }
+});
+
+RecurringJob.AddOrUpdate<IAppointmentReminderJob>(
+    "appointment-reminders",
+    job => job.SendUpcomingAppointmentRemindersAsync(),
+    Cron.Hourly);
+
+RecurringJob.AddOrUpdate<IDatabaseBackupJob>(
+    "database-backup",
+    job => job.BackupDatabaseAsync(),
+    Cron.Daily(2));
+// ---------------------------------------------------------------------
 
 app.MapHealthChecks("/health");
 
