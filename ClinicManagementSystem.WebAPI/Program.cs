@@ -93,6 +93,12 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero,
         RoleClaimType = ClaimTypes.Role
     };
+}).AddCookie("HangfireAuth", options =>
+{
+    options.LoginPath = "/hangfire-login";
+    options.AccessDeniedPath = "/hangfire-login";
+    options.Cookie.Name = "HangfireAuth";
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
 });
 
 builder.Services.AddAuthorization();
