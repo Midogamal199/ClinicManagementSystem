@@ -89,9 +89,18 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
                             .CountAsync(l => l.Status == LeaveStatus.Pending);
         }
 
-        public Task<List<RevenueTrendItemDto>> GetRevenueTrendAsync(DateTime fromDate)
+        public async Task<List<RevenueTrendItemDto>> GetRevenueTrendAsync(DateTime fromDate)
         {
-            throw new NotImplementedException();
+            return await _context.Payments
+               .Where(p => p.CreatedAt >= fromDate)
+               .GroupBy(p => p.CreatedAt.Date)
+               .Select(g => new RevenueTrendItemDto
+               {
+                   Date = g.Key,
+                   Amount = g.Sum(p => p.Amount)
+               })
+               .OrderBy(x => x.Date)
+               .ToListAsync();
         }
 
         public async Task<List<SpecialtyDistributionItemDto>> GetSpecialtyDistributionAsync()
