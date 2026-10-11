@@ -11,5 +11,6 @@ namespace ClinicManagementSystem.Domain.Interfaces
     {
         Task<Prescription?> GetByIdWithDetailsAsync(Guid id);
         Task<IEnumerable<Prescription>> GetByVisitIdAsync(Guid visitId);
+        Task<Prescription?> GetByIdForPdfAsync(Guid id);
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Domain.Interfaces;
+using ClinicManagementSystem.Infrastructure.Documents;
 using ClinicManagementSystem.Infrastructure.ExternalServices;
 using ClinicManagementSystem.Infrastructure.Identity;
 using ClinicManagementSystem.Infrastructure.Jobs;
@@ -73,6 +74,7 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
             services.AddScoped<IAppointmentReminderJob, AppointmentReminderJob>();
             services.AddScoped<ILabTestNotificationJob, LabTestNotificationJob>();
             services.AddScoped<IDatabaseBackupJob, DatabaseBackupJob>();
+            services.AddScoped<IPrescriptionPdfGenerator, PrescriptionPdfGenerator>();
 
             return services;
         }

@@ -19,6 +19,21 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<Prescription?> GetByIdForPdfAsync(Guid id)
+        {
+            return await _context.Prescriptions
+                .Include(p => p.Items)
+                .Include(p => p.Visit)
+                    .ThenInclude(v => v.Appointment)
+                        .ThenInclude(a => a.Patient)
+                .Include(p => p.Visit)
+                    .ThenInclude(v => v.Appointment)
+                        .ThenInclude(a => a.Doctor)
+                          .ThenInclude(d=>d.Employee)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+        }
+
         public async Task<Prescription?> GetByIdWithDetailsAsync(Guid id)
         {
             return await _context.Prescriptions
