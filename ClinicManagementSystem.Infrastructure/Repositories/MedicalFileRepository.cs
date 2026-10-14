@@ -113,7 +113,9 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
                        Id = l.Id,
                        TestType = l.TestType,
                        Status = l.Status.ToString(),
-                       ResultFileUrl = l.ResultFileUrl,
+                       ResultFileUrl = l.ResultFileUrl is null
+                       ? null
+                       : $"/api/LabTest/{l.Id}/result-file",
                        ResultFileName = l.ResultFileName,
                        UploadedAt = l.UploadedAt
                    })

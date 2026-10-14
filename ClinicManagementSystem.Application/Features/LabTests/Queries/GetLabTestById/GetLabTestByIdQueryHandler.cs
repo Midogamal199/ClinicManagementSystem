@@ -42,7 +42,9 @@ namespace ClinicManagementSystem.Application.Features.LabTests.Queries.GetLabTes
                 Id = labTest.Id,
                 TestType = labTest.TestType,
                 Status = labTest.Status.ToString(),
-                ResultFileUrl = labTest.ResultFileUrl,
+                ResultFileUrl = labTest.ResultFileUrl is null
+                ? null
+                : $"/api/LabTest/{labTest.Id}/result-file",
                 ResultFileName = labTest.ResultFileName,
                 UploadedAt = labTest.UploadedAt,
                 VisitId = labTest.VisitId

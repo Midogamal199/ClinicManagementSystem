@@ -1,6 +1,7 @@
 ﻿using ClinicManagementSystem.Application.Features.LabTests.Commands.OrderLabTest;
 using ClinicManagementSystem.Application.Features.LabTests.Commands.UploadLabTestResult;
 using ClinicManagementSystem.Application.Features.LabTests.Queries.GetLabTestById;
+using ClinicManagementSystem.Application.Features.LabTests.Queries.GetLabTestResultFile;
 using ClinicManagementSystem.Infrastructure.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -38,6 +39,13 @@ namespace ClinicManagementSystem.WebAPI.Controllers
         {
             var result = await _mediator.Send(new GetLabTestByIdQuery(id));
             return Ok(result);
+        }
+        [HttpGet("{id}/result-file")]
+        [Authorize(Roles = $"{Roles.Admin},{Roles.Doctor},{Roles.Receptionist},{Roles.Patient}")]
+        public async Task<IActionResult> DownloadResult(Guid id)
+        {
+            var result = await _mediator.Send(new GetLabTestResultFileQuery(id));
+            return File(result.Content, result.ContentType, result.FileName);
         }
     }
 }

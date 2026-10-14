@@ -11,28 +11,49 @@ namespace ClinicManagementSystem.Infrastructure.ExternalServices
 {
     public class LocalFileStorageService : IFileStorageService
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
+        private const string PrivateRootFolderName = "PrivateUploads";
+        private readonly string _rootPath;
 
         public LocalFileStorageService(IWebHostEnvironment webHostEnvironment)
         {
-            _webHostEnvironment = webHostEnvironment;
+            _rootPath = Path.GetFullPath(
+                            Path.Combine(webHostEnvironment.ContentRootPath, PrivateRootFolderName));
+        }
+
+        public Task<Stream?> OpenReadAsync(string storedPath)
+        {
+            var fullPath = Path.GetFullPath(Path.Combine(_rootPath, storedPath));
+
+            var insideRoot = fullPath.StartsWith(
+                _rootPath + Path.DirectorySeparatorChar,
+                StringComparison.OrdinalIgnoreCase);
+
+            if (!insideRoot || !File.Exists(fullPath))
+            {
+                return Task.FromResult<Stream?>(null);
+            }
+
+            Stream stream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            return Task.FromResult<Stream?>(stream);
         }
 
         public async Task<FileUploadResult> SaveFileAsync(IFormFile file, string subFolder)
         {
-            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, subFolder);
-            Directory.CreateDirectory(uploadsFolder);
+            var folder = Path.Combine(_rootPath, subFolder);
+            Directory.CreateDirectory(folder);
             var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            var fullPath = Path.Combine(folder, uniqueFileName);
+            await using (var stream = new FileStream(fullPath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
+
             return new FileUploadResult
             {
-                FileUrl = $"/uploads/{subFolder}/{uniqueFileName}",
+                StoredPath = $"{subFolder}/{uniqueFileName}",
                 FileName = file.FileName
             };
+
         }
     }
 }

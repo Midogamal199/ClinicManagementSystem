@@ -112,7 +112,7 @@ QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 var app = builder.Build();
 
 app.UseExceptionHandler();
-app.UseStaticFiles();
+//app.UseStaticFiles();
 
 using (var scope = app.Services.CreateScope())
 {

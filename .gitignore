@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Private patient uploads (Strictly ignore patient files)
+[Pp]rivateUploads/
+**/PrivateUploads/

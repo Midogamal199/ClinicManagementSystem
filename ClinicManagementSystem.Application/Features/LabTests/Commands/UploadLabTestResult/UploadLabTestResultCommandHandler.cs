@@ -34,7 +34,7 @@ namespace ClinicManagementSystem.Application.Features.LabTests.Commands.UploadLa
                 throw new KeyNotFoundException($"Lab test with Id '{request.LabTestId}' was not found.");
             }
             var uploadResult = await _fileStorageService.SaveFileAsync(request.ResultFile, "labtests");
-            labTest.ResultFileUrl = uploadResult.FileUrl;
+            labTest.ResultFileUrl = uploadResult.StoredPath;
             labTest.ResultFileName = uploadResult.FileName;
             labTest.UploadedAt = DateTime.UtcNow;
             labTest.Status = LabTestStatus.Completed;
