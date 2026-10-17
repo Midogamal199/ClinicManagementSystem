@@ -69,7 +69,9 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
                         {
                             Id = i.Id,
                             MedicineName = i.MedicineName,
-                            Dosage = i.Dosage
+                            Dosage = i.Dosage,
+                            DurationInDays = i.DurationInDays
+
                         })
                         .ToList()
                 })

@@ -17,5 +17,7 @@ namespace ClinicManagementSystem.Application.Features.Prescriptions.Commands.Cre
     {
         public string MedicineName { get; set; }
         public string Dosage { get; set; }
+        public int? DurationInDays { get; set; }
+
     }
 }

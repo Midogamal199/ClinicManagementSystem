@@ -9,8 +9,13 @@ namespace ClinicManagementSystem.Domain.Entities
 {
    public class PrescriptionItem: BaseEntity
     {
+        public const int MaxDurationInDays = 365;
+
         public string MedicineName { get; set; }
         public string Dosage { get; set; }
+        public int? DurationInDays { get; set; }
+        public DateTime? EndAlertProcessedAt { get; set; }
+
         public Guid PrescriptionId { get; set; }
         public Prescription Prescription { get; set; }
     }

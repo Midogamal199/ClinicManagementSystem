@@ -62,6 +62,8 @@ namespace ClinicManagementSystem.Infrastructure.Documents
                                 c.ConstantColumn(25);
                                 c.RelativeColumn(2);
                                 c.RelativeColumn(2);
+                                c.RelativeColumn(1);
+
                             });
 
                             table.Header(header =>
@@ -69,6 +71,8 @@ namespace ClinicManagementSystem.Infrastructure.Documents
                                 header.Cell().BorderBottom(1).PaddingVertical(4).Text("#").SemiBold();
                                 header.Cell().BorderBottom(1).PaddingVertical(4).Text("Medicine").SemiBold();
                                 header.Cell().BorderBottom(1).PaddingVertical(4).Text("Dosage").SemiBold();
+                                header.Cell().BorderBottom(1).PaddingVertical(4).Text("Duration").SemiBold();
+
                             });
 
                             for (var i = 0; i < model.Items.Count; i++)
@@ -77,6 +81,8 @@ namespace ClinicManagementSystem.Infrastructure.Documents
                                 table.Cell().BorderBottom(0.5f).PaddingVertical(4).Text($"{i + 1}");
                                 table.Cell().BorderBottom(0.5f).PaddingVertical(4).Text(item.MedicineName);
                                 table.Cell().BorderBottom(0.5f).PaddingVertical(4).Text(item.Dosage);
+                                table.Cell().BorderBottom(0.5f).PaddingVertical(4)
+                                .Text(item.DurationInDays is null ? "-" : $"{item.DurationInDays} day(s)");
                             }
                         });
 

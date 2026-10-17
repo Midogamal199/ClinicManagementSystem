@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using ClinicManagementSystem.Domain.Entities;
+using FluentValidation;
 
 namespace ClinicManagementSystem.Application.Features.Prescriptions.Commands.CreatePrescription
 {
@@ -21,6 +22,10 @@ namespace ClinicManagementSystem.Application.Features.Prescriptions.Commands.Cre
                 item.RuleFor(i => i.Dosage)
                     .NotEmpty().WithMessage("Dosage is required.")
                     .MaximumLength(100).WithMessage("Dosage cannot exceed 100 characters.");
+                item.RuleFor(i => i.DurationInDays)
+                    .InclusiveBetween(1, PrescriptionItem.MaxDurationInDays)
+                    .WithMessage($"Duration must be between 1 and {PrescriptionItem.MaxDurationInDays} days.")
+                    .When(i => i.DurationInDays.HasValue);
             });
         }
     }

@@ -533,6 +533,12 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("DurationInDays")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndAlertProcessedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 

@@ -53,6 +53,8 @@ namespace ClinicManagementSystem.Application.Features.Prescriptions.Queries.GetP
                     Id = i.Id,
                     MedicineName = i.MedicineName,
                     Dosage = i.Dosage,
+                    DurationInDays = i.DurationInDays
+
                 }).ToList()
             };
             return new PrescriptionPdfResult

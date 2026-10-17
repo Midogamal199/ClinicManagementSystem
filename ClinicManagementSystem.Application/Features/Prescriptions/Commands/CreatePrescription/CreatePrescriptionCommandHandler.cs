@@ -28,14 +28,16 @@ namespace ClinicManagementSystem.Application.Features.Prescriptions.Commands.Cre
             var prescription = new Prescription
             {
                 VisitId = request.VisitId,
-                IssuedAt = DateTime.Now
+                IssuedAt = DateTime.UtcNow
             };
             foreach(var item in request.Items)
             {
                 prescription.Items.Add(new PrescriptionItem
                 {
                     MedicineName = item.MedicineName,
-                    Dosage = item.Dosage
+                    Dosage = item.Dosage,
+                    DurationInDays = item.DurationInDays
+
                 });
             }
             await _unitOfWork.Repository<Prescription>().AddAsync(prescription);

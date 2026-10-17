@@ -169,6 +169,10 @@ RecurringJob.AddOrUpdate<IDatabaseBackupJob>(
     "database-backup",
     job => job.BackupDatabaseAsync(),
     Cron.Daily(2));
+RecurringJob.AddOrUpdate<IPrescriptionTreatmentEndJob>(
+    "treatment-end-alerts",
+    job => job.SendTreatmentEndAlertsAsync(),
+    Cron.Daily(6));
 // ---------------------------------------------------------------------
 
 app.MapHealthChecks("/health");
