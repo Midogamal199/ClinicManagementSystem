@@ -108,6 +108,8 @@ builder.Services.AddProblemDetails();
 
 // إعداد رخصة QuestPDF المجانية
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+QuestPDF.Settings.UseSystemFonts = true;
+QuestPDF.Settings.ThrowOnMissingFontFamilies = false;
 
 var app = builder.Build();
 

@@ -25,7 +25,7 @@ namespace ClinicManagementSystem.Application.Features.MedicalFiles.Queries.GetMe
 
         public async Task<MedicalFileDto> Handle(GetMedicalFileQuery request, CancellationToken cancellationToken)
         {
-            if (_currentUserService.IsInRole("patient") && request.PatientId != _currentUserService.PatientId)
+            if (_currentUserService.IsInRole("Patient") && request.PatientId != _currentUserService.PatientId)
             {
                 throw new ForbiddenAccessException("You are not allowed to view a medical file that does not belong to you.");
 
