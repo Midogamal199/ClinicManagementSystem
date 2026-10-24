@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using ClinicManagementSystem.Application.Features.Dashboard.Queries.GetAgeDistribution;
 using ClinicManagementSystem.Application.Features.Dashboard.Queries.GetDashboardSummary;
 using ClinicManagementSystem.Application.Features.Dashboard.Queries.GetDiagnosisTrends;
 using ClinicManagementSystem.Application.Features.Dashboard.Queries.GetFrequentVisitors;
@@ -81,5 +82,12 @@ namespace ClinicManagementSystem.WebAPI.Controllers
             var result = await _mediator.Send(new GetFrequentVisitorsQuery());
             return Ok(result);
         }
+        [HttpGet("age-distribution")]
+        public async Task<IActionResult> GetAgeDistribution()
+        {
+            var result = await _mediator.Send(new GetAgeDistributionQuery());
+            return Ok(result);
+        }
+
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicManagementSystem.Application.DTOs.Dashboard;
 using ClinicManagementSystem.Domain.DTOs.Dashboard;
 using ClinicManagementSystem.Domain.Enums;
 using ClinicManagementSystem.Domain.Interfaces;
@@ -18,6 +19,28 @@ namespace ClinicManagementSystem.Infrastructure.Repositories
         public DashboardRepository(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<List<AgeDistributionItemDto>> GetAgeDistributionAsync()
+        {
+            var today = DateTime.UtcNow.Date;
+            var born13YearsAgo = today.AddYears(-13);
+            var born18YearsAgo = today.AddYears(-18);
+            var born40YearsAgo = today.AddYears(-40);
+            var born60YearsAgo = today.AddYears(-60);
+            var children= await _context.Patients.CountAsync(p => p.DateOfBirth > born13YearsAgo);
+            var teens = await _context.Patients.CountAsync(p => p.DateOfBirth <= born13YearsAgo && p.DateOfBirth > born18YearsAgo);
+            var adults = await _context.Patients.CountAsync(p => p.DateOfBirth <= born18YearsAgo && p.DateOfBirth > born40YearsAgo);
+            var middleAged = await _context.Patients.CountAsync(p => p.DateOfBirth <= born40YearsAgo && p.DateOfBirth > born60YearsAgo);
+            var seniors = await _context.Patients.CountAsync(p => p.DateOfBirth <= born60YearsAgo);
+            return new List<AgeDistributionItemDto>
+            {
+               new() { AgeGroup = "Children (0-12)", Count = children },
+               new() { AgeGroup = "Teens (13-17)", Count = teens },
+               new() { AgeGroup = "Adults (18-39)", Count = adults },
+               new() { AgeGroup = "Middle-aged (40-59)", Count = middleAged },
+               new() { AgeGroup = "Seniors (60+)", Count = seniors }
+            };
         }
 
         public async Task<int> GetCurrentlyPresentCountAsync()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ClinicManagementSystem.Application.DTOs.Dashboard;
 using ClinicManagementSystem.Domain.DTOs.Dashboard;
 
 
@@ -21,5 +22,6 @@ namespace ClinicManagementSystem.Domain.Interfaces
         Task<List<GenderDistributionItemDto>> GetGenderDistributionAsync();
         Task<List<SpecialtyDistributionItemDto>> GetSpecialtyDistributionAsync();
         Task<List<FrequentVisitorDto>> GetFrequentVisitorsAsync(int top = 10);
+        Task<List<AgeDistributionItemDto>> GetAgeDistributionAsync();
     }
 }
