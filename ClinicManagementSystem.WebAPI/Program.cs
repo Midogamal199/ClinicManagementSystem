@@ -175,6 +175,15 @@ RecurringJob.AddOrUpdate<IPrescriptionTreatmentEndJob>(
     "treatment-end-alerts",
     job => job.SendTreatmentEndAlertsAsync(),
     Cron.Daily(6));
+RecurringJob.AddOrUpdate<IScheduledReportsJob>(
+    "weekly-revenue-report",
+    job => job.SendWeeklyRevenueReportAsync(),
+    Cron.Weekly(DayOfWeek.Monday, 6));
+
+RecurringJob.AddOrUpdate<IScheduledReportsJob>(
+    "monthly-revenue-report",
+    job => job.SendMonthlyRevenueReportAsync(),
+    Cron.Monthly(1, 6));
 // ---------------------------------------------------------------------
 
 app.MapHealthChecks("/health");

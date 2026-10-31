@@ -78,7 +78,9 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
             services.AddScoped<IMedicalFileRepository, MedicalFileRepository>();
             services.AddScoped<IPrescriptionTreatmentEndJob, PrescriptionTreatmentEndJob>();
             services.AddScoped<IReportRepository, ReportRepository>();
-            services.AddScoped<IMonthlyRevenueReportGenerator, MonthlyRevenueReportExcelGenerator>();
+            services.AddScoped<IRevenueReportService, RevenueReportService>();
+            services.AddScoped<IRevenueReportGenerator, RevenueReportExcelGenerator>();
+            services.AddScoped<IScheduledReportsJob, ScheduledReportsJob>();
             return services;
         }
     }

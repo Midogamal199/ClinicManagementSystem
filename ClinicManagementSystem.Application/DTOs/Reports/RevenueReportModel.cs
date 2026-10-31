@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace ClinicManagementSystem.Application.DTOs.Reports
 {
-    public class MonthlyRevenueReportModel
+    public class RevenueReportModel
     {
-        public int Year { get; set; }
-        public int Month { get; set; }
+        public DateTime PeriodStart { get; set; }
+        public DateTime PeriodEnd { get; set; }
         public decimal TotalRevenue { get; set; }
         public int PaymentsCount { get; set; }
         public List<RevenueByMethodItem> ByMethod { get; set; } = new();

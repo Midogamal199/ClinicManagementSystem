@@ -2,8 +2,19 @@
 
 namespace ClinicManagementSystem.Application.Interfaces
 {
-    public interface IEmailService
+    public class EmailAttachment
     {
-        Task SendEmailAsync(string toEmail, string subject, string body);
+        public string FileName { get; set; } = string.Empty;
+        public string ContentType { get; set; } = "application/octet-stream";
+        public byte[] Content { get; set; } = Array.Empty<byte>();
     }
+        public interface IEmailService
+        {
+        Task SendEmailAsync(string toEmail, string subject, string body);
+        Task SendEmailAsync(
+                    string toEmail,
+                    string subject,
+                    string body,
+                    IEnumerable<EmailAttachment> attachments);
+        }
 }

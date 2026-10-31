@@ -2,8 +2,8 @@
 
 namespace ClinicManagementSystem.Application.Interfaces
 {
-    public interface IMonthlyRevenueReportGenerator
+    public interface IRevenueReportGenerator
     {
-        byte[] Generate(MonthlyRevenueReportModel model);
+        byte[] Generate(RevenueReportModel model);
     }
 }

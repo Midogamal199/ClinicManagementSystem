@@ -77,6 +77,15 @@ namespace ClinicManagementSystem.Infrastructure.Identity
             return await _userManager.Users.AnyAsync(u => u.EmployeeId == employeeId);
         }
 
+        public async Task<List<string>> GetEmailsByRoleAsync(string role)
+        {
+            var users= await _userManager.GetUsersInRoleAsync(role);
+            return users.Where(u => !string.IsNullOrWhiteSpace(u.Email))
+                .Select(u => u.Email!)
+                .Distinct()
+                .ToList();
+        }
+
         public async Task<Guid?> GetUserIdByEmailAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

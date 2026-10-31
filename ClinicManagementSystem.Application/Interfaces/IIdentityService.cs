@@ -18,6 +18,7 @@ namespace ClinicManagementSystem.Application.Interfaces
         Task RevokeAllUserTokensAsync(Guid userId);
         Task<Guid?> GetUserIdByEmailAsync(string email);
         Task<AppIdentityResult> ResetPasswordAsync(string email, string newPassword);
+        Task<List<string>> GetEmailsByRoleAsync(string role);
 
 
     }
