@@ -184,6 +184,7 @@ RecurringJob.AddOrUpdate<IScheduledReportsJob>(
     "monthly-revenue-report",
     job => job.SendMonthlyRevenueReportAsync(),
     Cron.Monthly(1, 6));
+
 // ---------------------------------------------------------------------
 
 app.MapHealthChecks("/health");

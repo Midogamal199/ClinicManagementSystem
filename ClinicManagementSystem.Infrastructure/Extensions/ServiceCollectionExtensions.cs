@@ -81,6 +81,7 @@ namespace ClinicManagementSystem.Infrastructure.Extensions
             services.AddScoped<IRevenueReportService, RevenueReportService>();
             services.AddScoped<IRevenueReportGenerator, RevenueReportExcelGenerator>();
             services.AddScoped<IScheduledReportsJob, ScheduledReportsJob>();
+            services.AddScoped<ISearchRepository, SearchRepository>();
             return services;
         }
     }
