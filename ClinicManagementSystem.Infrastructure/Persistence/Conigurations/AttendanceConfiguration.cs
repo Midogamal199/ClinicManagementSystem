@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClinicManagementSystem.Infrastructure.Persistence.Configurations
+namespace ClinicManagementSystem.Infrastructure.Persistence.Conigurations
 {
     public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
     {
