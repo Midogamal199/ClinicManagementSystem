@@ -158,7 +158,7 @@ Hangfire cron expressions run in **UTC** unless configured otherwise.
 ### Run locally
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Midogamal199/ClinicManagementSystem
 cd ClinicManagementSystem
 
 # Store secrets outside source control
@@ -486,7 +486,7 @@ This document describes the SQL Server schema produced by EF Core (code-first). 
 ---
 
 ## 2. Entity Relationship Diagram
-![ERD](docs/erd.png)
+
 
 ```mermaid
 erDiagram
