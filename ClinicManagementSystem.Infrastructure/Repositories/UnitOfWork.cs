@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClinicManagementSystem.Application.Common;
+using ClinicManagementSystem.Domain.Common;
 using ClinicManagementSystem.Domain.Interfaces;
 using ClinicManagementSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore.Storage;

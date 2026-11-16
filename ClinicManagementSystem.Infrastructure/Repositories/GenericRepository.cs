@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using ClinicManagementSystem.Application.Common;
+using ClinicManagementSystem.Domain.Common;
 using ClinicManagementSystem.Domain.Interfaces;
 using ClinicManagementSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿using ClinicManagementSystem.Application.Common;
+﻿using ClinicManagementSystem.Domain.Common;
 using ClinicManagementSystem.Domain.Enums;
 
 namespace ClinicManagementSystem.Domain.Entities
