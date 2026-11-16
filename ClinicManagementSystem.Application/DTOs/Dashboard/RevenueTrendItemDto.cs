@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClinicManagementSystem.Domain.DTOs.Dashboard
+namespace ClinicManagementSystem.Application.DTOs.Dashboard
 {
     public class RevenueTrendItemDto
     {

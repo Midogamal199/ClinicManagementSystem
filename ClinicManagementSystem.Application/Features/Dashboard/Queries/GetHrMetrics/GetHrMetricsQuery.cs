@@ -1,4 +1,4 @@
-﻿using ClinicManagementSystem.Domain.DTOs.Dashboard;
+﻿using ClinicManagementSystem.Application.DTOs.Dashboard;
 using MediatR;
 
 namespace ClinicManagementSystem.Application.Features.Dashboard.Queries.GetHrMetrics

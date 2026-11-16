@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClinicManagementSystem.Application.DTOs.Dashboard;
-using ClinicManagementSystem.Domain.Interfaces;
+using ClinicManagementSystem.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 

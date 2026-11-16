@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using ClinicManagementSystem.Application.DTOs.Dashboard;
-using ClinicManagementSystem.Domain.DTOs.Dashboard;
 
 
 
-namespace ClinicManagementSystem.Domain.Interfaces
+
+namespace ClinicManagementSystem.Application.Interfaces
 {
     public interface IDashboardRepository
     {

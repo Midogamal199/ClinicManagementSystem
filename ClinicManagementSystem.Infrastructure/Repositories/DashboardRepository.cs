@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClinicManagementSystem.Application.Interfaces;
 using ClinicManagementSystem.Application.DTOs.Dashboard;
-using ClinicManagementSystem.Domain.DTOs.Dashboard;
 using ClinicManagementSystem.Domain.Enums;
-using ClinicManagementSystem.Domain.Interfaces;
 using ClinicManagementSystem.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
