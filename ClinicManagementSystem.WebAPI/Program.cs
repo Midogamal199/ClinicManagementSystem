@@ -126,18 +126,27 @@ using (var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new IdentityRole<Guid>(roleName));
         }
     }
+
+    // Seeding أول حساب Admin من الـ configuration
+    var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+    var adminEmail = configuration["SeedAdmin:Email"];
+    var adminPassword = configuration["SeedAdmin:Password"];
+
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    var adminExists = await userManager.GetUsersInRoleAsync(Roles.Admin);
-    if (adminExists.Count == 0)
+    var existingAdmins = await userManager.GetUsersInRoleAsync(Roles.Admin);
+
+    if (existingAdmins.Count == 0
+        && !string.IsNullOrWhiteSpace(adminEmail)
+        && !string.IsNullOrWhiteSpace(adminPassword))
     {
         var adminUser = new ApplicationUser
         {
-            UserName = "admin@clinic.com",
-            Email = "admin@clinic.com",
+            UserName = adminEmail,
+            Email = adminEmail,
             EmailConfirmed = true
         };
 
-        var result = await userManager.CreateAsync(adminUser, "Admin@1234");
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, Roles.Admin);
