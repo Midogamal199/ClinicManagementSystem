@@ -57,7 +57,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Appointments");
+                    b.ToTable("Appointments", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Attendance", b =>
@@ -88,7 +88,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("Attendances");
+                    b.ToTable("Attendances", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Department", b =>
@@ -113,7 +113,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Diagnosis", b =>
@@ -148,7 +148,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("Diagnoses");
+                    b.ToTable("Diagnoses", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Doctor", b =>
@@ -179,7 +179,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
                     b.HasIndex("EmployeeId")
                         .IsUnique();
 
-                    b.ToTable("Doctors");
+                    b.ToTable("Doctors", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Employee", b =>
@@ -227,7 +227,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Employees");
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Invoice", b =>
@@ -260,7 +260,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.LabTest", b =>
@@ -305,7 +305,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("LabTests");
+                    b.ToTable("LabTests", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.LeaveRequest", b =>
@@ -341,7 +341,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("LeaveRequests");
+                    b.ToTable("LeaveRequests", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.MedicalFile", b =>
@@ -370,7 +370,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
                     b.HasIndex("PatientId")
                         .IsUnique();
 
-                    b.ToTable("MedicalFiles");
+                    b.ToTable("MedicalFiles", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Patient", b =>
@@ -411,7 +411,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patients");
+                    b.ToTable("Patients", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Payment", b =>
@@ -444,7 +444,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.PaymentTransaction", b =>
@@ -488,7 +488,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[PaymentId] IS NOT NULL");
 
-                    b.ToTable("PaymentTransaction");
+                    b.ToTable("PaymentTransaction", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Prescription", b =>
@@ -516,7 +516,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("Prescriptions");
+                    b.ToTable("Prescriptions", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.PrescriptionItem", b =>
@@ -557,7 +557,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("PrescriptionId");
 
-                    b.ToTable("PrescriptionItems");
+                    b.ToTable("PrescriptionItems", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Specialty", b =>
@@ -582,7 +582,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialties");
+                    b.ToTable("Specialties", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Domain.Entities.Visit", b =>
@@ -616,7 +616,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
                     b.HasIndex("AppointmentId")
                         .IsUnique();
 
-                    b.ToTable("Visits");
+                    b.ToTable("Visits", (string)null);
                 });
 
             modelBuilder.Entity("ClinicManagementSystem.Infrastructure.Identity.ApplicationUser", b =>
@@ -729,7 +729,7 @@ namespace ClinicManagementSystem.Infrastructure.Migrations
                     b.HasIndex("Token")
                         .IsUnique();
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("DoctorSpecialty", b =>
