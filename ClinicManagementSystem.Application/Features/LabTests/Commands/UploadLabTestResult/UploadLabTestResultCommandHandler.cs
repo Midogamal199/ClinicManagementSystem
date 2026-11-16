@@ -8,7 +8,7 @@ using ClinicManagementSystem.Domain.Entities;
 using ClinicManagementSystem.Domain.Enums;
 using ClinicManagementSystem.Domain.Interfaces;
 using MediatR;
-using Hangfire;
+
 
 namespace ClinicManagementSystem.Application.Features.LabTests.Commands.UploadLabTestResult
 {
@@ -17,13 +17,17 @@ namespace ClinicManagementSystem.Application.Features.LabTests.Commands.UploadLa
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileStorageService _fileStorageService;
+        private readonly IBackgroundJobScheduler _jobScheduler;
+
 
         public UploadLabTestResultCommandHandler(
             IUnitOfWork unitOfWork,
-            IFileStorageService fileStorageService)
+            IFileStorageService fileStorageService,
+            IBackgroundJobScheduler jobScheduler)
         {
             _unitOfWork = unitOfWork;
             _fileStorageService = fileStorageService;
+            _jobScheduler = jobScheduler;
         }
 
         public async Task<Unit> Handle(UploadLabTestResultCommand request, CancellationToken cancellationToken)
@@ -40,8 +44,7 @@ namespace ClinicManagementSystem.Application.Features.LabTests.Commands.UploadLa
             labTest.Status = LabTestStatus.Completed;
             _unitOfWork.Repository<LabTest>().Update(labTest);
             await _unitOfWork.SaveChangesAsync();
-            BackgroundJob.Enqueue<ILabTestNotificationJob>(
-            job => job.SendResultUploadedNotificationAsync(labTest.Id));
+            _jobScheduler.EnqueueLabTestResultNotification(labTest.Id);
             return Unit.Value;
 
 

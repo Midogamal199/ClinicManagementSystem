@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using ClinicManagementSystem.Application.Common;
+using ClinicManagementSystem.Domain.Common;
 
 namespace ClinicManagementSystem.Domain.Entities
 {

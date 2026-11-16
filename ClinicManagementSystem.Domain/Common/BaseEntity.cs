@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ClinicManagementSystem.Application.Common
+namespace ClinicManagementSystem.Domain.Common
 {
     public abstract class BaseEntity
     {
